@@ -12,6 +12,26 @@
         <module>opc2aas</module>
     </modules>
 
+    <name>BaSyx Parent</name>
+    <description>Parent POM for Eclipse BaSyx</description>
+    <url>https://www.eclipse.org/basyx/</url>
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <organization>Hochschule für Technik und Wirtschaft Berlin</organization>
+            <id>aaronzi</id>
+            <name>Aaron Zielstorff</name>
+            <email>aaron.zielstorff@htw-berlin.de</email>
+        </developer>
+    </developers>
+
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
