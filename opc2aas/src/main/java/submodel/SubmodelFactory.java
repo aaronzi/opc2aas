@@ -23,14 +23,14 @@ import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultReference;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodel;
 import org.eclipse.digitaltwin.basyx.InvokableOperation;
 public class SubmodelFactory {
-    public Submodel create() {
+    public Submodel CreationSubmodel() {
         List<LangStringTextType> description = new ArrayList<LangStringTextType>();
         description.add(new DefaultLangStringTextType.Builder().language("de-DE")
-                .text("Test")
+                .text("CreationSubmodel")
                 .build());
         List<LangStringNameType> displayName = new ArrayList<LangStringNameType>();
         displayName.add(new DefaultLangStringNameType.Builder().language("de-DE")
-                .text("Test")
+                .text("CreationSubmodel")
                 .build());
         List<Key> refKeys = new ArrayList<Key>();
         refKeys.add(new DefaultKey.Builder().value("123")
@@ -40,14 +40,14 @@ public class SubmodelFactory {
                 .value("123")
                 .idShort("test")
                 .build();
-        Operation square = createInvokableOperation();
-        List<SubmodelElement> smeList = Arrays.asList(sme1, square);
+        Operation creation = createAASFromOPCNodeStructure();
+        List<SubmodelElement> smeList = Arrays.asList(sme1, creation);
 
         Submodel submodel = new DefaultSubmodel.Builder().category("TestCategory")
                 .description(description)
                 .displayName(displayName)
-                .id("Example")
-                .idShort("example")
+                .id("CreationSubmodel")
+                .idShort("CreationSubmodel")
                 .kind(ModellingKind.INSTANCE)
                 .semanticId(new DefaultReference.Builder().keys(refKeys)
                         .build())
@@ -57,7 +57,41 @@ public class SubmodelFactory {
         return submodel;
     }
 
-    private static Operation createInvokableOperation() {
+    public Submodel OutputSubmodel() {
+        List<LangStringTextType> description = new ArrayList<LangStringTextType>();
+        description.add(new DefaultLangStringTextType.Builder().language("de-DE")
+                .text("OutputSubmodel")
+                .build());
+        List<LangStringNameType> displayName = new ArrayList<LangStringNameType>();
+        displayName.add(new DefaultLangStringNameType.Builder().language("de-DE")
+                .text("OutputSubmodel")
+                .build());
+        List<Key> refKeys = new ArrayList<Key>();
+        refKeys.add(new DefaultKey.Builder().value("123")
+                .build());
+
+        SubmodelElement sme1 = new DefaultProperty.Builder()
+                .value("123")
+                .idShort("test")
+                .build();
+        Operation creation = createAASFromOPCNodeStructure();
+        List<SubmodelElement> smeList = Arrays.asList(sme1, creation);
+
+        Submodel submodel = new DefaultSubmodel.Builder().category("TestCategory")
+                .description(description)
+                .displayName(displayName)
+                .id("OutputSubmodel")
+                .idShort("OutputSubmodel")
+                .kind(ModellingKind.INSTANCE)
+                .semanticId(new DefaultReference.Builder().keys(refKeys)
+                        .build())
+                .submodelElements(smeList)
+                .build();
+
+        return submodel;
+    }
+
+    private static Operation createAASFromOPCNodeStructure() {
         return new InvokableOperation.Builder()
                 .idShort("AASfromOPC")
                 .inputVariables(Arrays.asList(createStringOperationVariable("aasIdShort"),
@@ -65,7 +99,7 @@ public class SubmodelFactory {
                         createStringOperationVariable("opcServerUrl"),
                         createStringOperationVariable("opcUsername"),
                         createStringOperationVariable("opcPassword")))
-                .invokable(SubmodelFactory::square)
+                .invokable(SubmodelFactory::creation)
                 .build();
     }
 
@@ -77,12 +111,12 @@ public class SubmodelFactory {
         return new DefaultOperationVariable.Builder().value(new DefaultProperty.Builder().idShort(idShort).valueType(DataTypeDefXsd.STRING).build()).build();
     }
 
-    private static OperationVariable[] square(OperationVariable[] inputs) {
+    private static OperationVariable[] creation(OperationVariable[] inputs) {
         Property in = (Property) inputs[0].getValue();
         Integer val = Integer.valueOf(in.getValue());
-        Integer squared = val * val;
-        in.setValue(squared.toString());
-        in.setIdShort("result");
+        //Integer squared = val * val;
+        //in.setValue(squared.toString());
+        //in.setIdShort("result");
         return new OperationVariable[] { createOperationVariable(in) };
     }
 }
