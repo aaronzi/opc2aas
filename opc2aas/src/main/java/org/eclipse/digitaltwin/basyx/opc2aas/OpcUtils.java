@@ -114,7 +114,7 @@ public class OpcUtils {
                     .getEndpoints(client.getConfig().getEndpoint().getEndpointUrl()).get();
 
             if (!endpoints.isEmpty()) {
-                return endpoints.getFirst().getServer().getApplicationUri();
+                return endpoints.get(0).getServer().getApplicationUri();
             } else {
                 logger.info("No endpoints were found for the server.");
             }

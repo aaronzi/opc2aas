@@ -1,4 +1,5 @@
 package submodel;
+import org.eclipse.digitaltwin.basyx.opc2aas.OpcToAas;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
@@ -36,4 +37,5 @@ public class SubmodelRepositoryComponent {
     public SubmodelServiceFactory getSubmodelServiceFactory(SubmodelServiceFactory aasServiceFactory, List<SubmodelServiceFeature> features) {
         return new DecoratedSubmodelServiceFactory(aasServiceFactory, features);
     }
+
 }

@@ -1,5 +1,6 @@
 package org.eclipse.digitaltwin.basyx.opc2aas;
 
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,6 +16,7 @@ import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
 import org.eclipse.digitaltwin.aas4j.v3.model.Environment;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.SerializationException;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.aasx.AASXSerializer;
+import submodel.SubmodelFactory;
 
 public class OpcToAas {
     private static final Logger logger = LoggerFactory.getLogger(OpcToAas.class);
@@ -27,6 +29,7 @@ public class OpcToAas {
     public static void main(String[] args) {
         try {
             logger.info("OPC2AAS started");
+            SubmodelFactory.creationSubmodel();
             initializeDataBridgeConfig();
             OpcUaClient client = createOpcUaClientConnection();
             NodeInfo subTree = readOpcUaSubtree(client);
@@ -55,10 +58,10 @@ public class OpcToAas {
      * @throws Exception If the connection cannot be created.
      */
     private static OpcUaClient createOpcUaClientConnection() throws Exception {
-        String endpointUrl = System.getenv("ENDPOINT_URL"); // URL of the OPC UA server
-        String username = System.getenv("USERNAME"); // username for the OPC UA server
-        String password = System.getenv("PASSWORD"); // password for the OPC UA server
-        OpcUaClient client = OpcUtils.createClientConnection(endpointUrl, username, password);
+        String opcServerUrl = System.getenv("ENDPOINT_URL"); // URL of the OPC UA server
+        String opcUsername = System.getenv("USERNAME"); // username for the OPC UA server
+        String opcPassword = System.getenv("PASSWORD"); // password for the OPC UA server
+        OpcUaClient client = OpcUtils.createClientConnection(opcServerUrl, opcUsername, opcPassword);
         logger.info("OPC UA client connection created");
         return client;
     }
@@ -72,9 +75,9 @@ public class OpcToAas {
      */
     private static NodeInfo readOpcUaSubtree(OpcUaClient client) throws Exception {
         // specify the NodeId of the starting node
-        NodeId startNodeId = OpcUtils.stringToNodeId(System.getenv("START_NODE_ID"));
+        NodeId opcNodeId = OpcUtils.stringToNodeId(System.getenv("START_NODE_ID"));
         // read the subtree starting from the specified starting node
-        NodeInfo subTree = OpcUtils.readEntireSubtree(client, startNodeId);
+        NodeInfo subTree = OpcUtils.readEntireSubtree(client, opcNodeId);
         logger.info("OPC UA subtree read");
 
         return subTree;
@@ -92,10 +95,10 @@ public class OpcToAas {
         String serverApplicationUri = OpcUtils.getServerApplicationUri(client);
         String submodelRepositoryUrl = System.getenv("SUBMODEL_REPOSITORY_URL");
         String aasIdShort = System.getenv("AAS_ID_SHORT");
-        String endpointUrl = System.getenv("ENDPOINT_URL"); // URL of the OPC UA server
-        String username = System.getenv("USERNAME"); // username for the OPC UA server
-        String password = System.getenv("PASSWORD"); // password for the OPC UA server
-        Environment environment = AasBuilder.createEnvironment(aasIdShort, serverApplicationUri, subTree, endpointUrl, username, password, submodelRepositoryUrl);
+        String opcServerUrl = System.getenv("ENDPOINT_URL"); // URL of the OPC UA server
+        String opcUsername = System.getenv("USERNAME"); // username for the OPC UA server
+        String opcPassword = System.getenv("PASSWORD"); // password for the OPC UA server
+        Environment environment = AasBuilder.createEnvironment(aasIdShort, serverApplicationUri, subTree, opcServerUrl, opcUsername, opcPassword, submodelRepositoryUrl);
         logger.info("AAS created");
         return environment;
     }

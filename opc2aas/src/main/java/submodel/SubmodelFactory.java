@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Base64;
+
 import org.eclipse.digitaltwin.aas4j.v3.model.DataTypeDefXsd;
 import org.eclipse.digitaltwin.aas4j.v3.model.Key;
 import org.eclipse.digitaltwin.aas4j.v3.model.LangStringNameType;
@@ -23,7 +28,9 @@ import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultReference;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodel;
 import org.eclipse.digitaltwin.basyx.InvokableOperation;
 public class SubmodelFactory {
-    public Submodel CreationSubmodel() {
+
+    private static final String DATA_BRIDGE_CONFIG_FOLDER = "DataBridgeConfig";
+    public static Submodel creationSubmodel() {
         List<LangStringTextType> description = new ArrayList<LangStringTextType>();
         description.add(new DefaultLangStringTextType.Builder().language("de-DE")
                 .text("CreationSubmodel")
@@ -70,12 +77,38 @@ public class SubmodelFactory {
         refKeys.add(new DefaultKey.Builder().value("123")
                 .build());
 
-        SubmodelElement sme1 = new DefaultProperty.Builder()
+        SubmodelElement generatedAAS = new DefaultProperty.Builder()
+                .value("123")
+                .idShort("test")
+                .build();
+        SubmodelElement OPCUAConsumerFile = new DefaultProperty.Builder()
+                .value("123")
+                .idShort("test")
+                .build();
+        SubmodelElement ExtractValueFile = new DefaultProperty.Builder()
+                .value("123")
+                .idShort("test")
+                .build();
+        SubmodelElement JsonataTransformerFile = new DefaultProperty.Builder()
+                .value("123")
+                .idShort("test")
+                .build();
+        SubmodelElement JsonJacksonTransformerFile = new DefaultProperty.Builder()
+                .value("123")
+                .idShort("test")
+                .build();
+        SubmodelElement AASServerFile = new DefaultProperty.Builder()
+                .value("123")
+                .idShort("test")
+                .build();
+        SubmodelElement RoutesFile = new DefaultProperty.Builder()
                 .value("123")
                 .idShort("test")
                 .build();
         Operation creation = createAASFromOPCNodeStructure();
-        List<SubmodelElement> smeList = Arrays.asList(sme1, creation);
+        List<SubmodelElement> smeList = Arrays.asList(generatedAAS, OPCUAConsumerFile,
+                ExtractValueFile, JsonataTransformerFile, JsonJacksonTransformerFile,
+                AASServerFile, RoutesFile, creation);
 
         Submodel submodel = new DefaultSubmodel.Builder().category("TestCategory")
                 .description(description)
@@ -87,6 +120,7 @@ public class SubmodelFactory {
                         .build())
                 .submodelElements(smeList)
                 .build();
+
 
         return submodel;
     }
@@ -113,7 +147,7 @@ public class SubmodelFactory {
 
     private static OperationVariable[] creation(OperationVariable[] inputs) {
         Property in = (Property) inputs[0].getValue();
-        Integer val = Integer.valueOf(in.getValue());
+        String val = in.getValue();
         //Integer squared = val * val;
         //in.setValue(squared.toString());
         //in.setIdShort("result");
