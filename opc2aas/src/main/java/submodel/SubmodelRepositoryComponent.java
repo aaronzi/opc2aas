@@ -20,11 +20,12 @@ import org.springframework.context.annotation.Primary;
 import java.util.List;
 
 @SpringBootApplication(
-        scanBasePackages = "org.eclipse.digitaltwin.basyx",
+        scanBasePackages = {"org.eclipse.digitaltwin.basyx", "submodel", "org.eclipse.digitaltwin.basyx.opc2aas.OpcToAas"},
         exclude = { MongoAutoConfiguration.class, MongoDataAutoConfiguration.class })
 public class SubmodelRepositoryComponent {
     public static void main(String[] args) {
         SpringApplication.run(SubmodelRepositoryComponent.class, args);
+        OpcToAas.main(args);
     }
     @Bean
     @ConditionalOnMissingBean
@@ -37,5 +38,7 @@ public class SubmodelRepositoryComponent {
     public SubmodelServiceFactory getSubmodelServiceFactory(SubmodelServiceFactory aasServiceFactory, List<SubmodelServiceFeature> features) {
         return new DecoratedSubmodelServiceFactory(aasServiceFactory, features);
     }
+
+
 
 }

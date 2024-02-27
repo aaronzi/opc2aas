@@ -27,6 +27,8 @@ import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultProperty;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultReference;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodel;
 import org.eclipse.digitaltwin.basyx.InvokableOperation;
+import org.eclipse.digitaltwin.basyx.opc2aas.OpcToAas;
+
 public class SubmodelFactory {
 
     private static final String DATA_BRIDGE_CONFIG_FOLDER = "DataBridgeConfig";
@@ -64,7 +66,7 @@ public class SubmodelFactory {
         return submodel;
     }
 
-    public Submodel OutputSubmodel() {
+    public static Submodel outputSubmodel() {
         List<LangStringTextType> description = new ArrayList<LangStringTextType>();
         description.add(new DefaultLangStringTextType.Builder().language("de-DE")
                 .text("OutputSubmodel")
@@ -146,11 +148,21 @@ public class SubmodelFactory {
     }
 
     private static OperationVariable[] creation(OperationVariable[] inputs) {
-        Property in = (Property) inputs[0].getValue();
-        String val = in.getValue();
+
+        String aasIdShort = ((Property) inputs[0].getValue()).getValue();
+        String opcNodeId = ((Property) inputs[1].getValue()).getValue();
+        String opcServerUrl = ((Property) inputs[2].getValue()).getValue();
+        String opcUsername = ((Property) inputs[3].getValue()).getValue();
+        String opcPassword = ((Property) inputs[4].getValue()).getValue();
+   //         in.setIdShort("result");
+   //         results[i] = createOperationVariable(in);
+
+        OpcToAas.processOperation(aasIdShort, opcNodeId, opcServerUrl, opcUsername, opcPassword);
+
+
         //Integer squared = val * val;
         //in.setValue(squared.toString());
         //in.setIdShort("result");
-        return new OperationVariable[] { createOperationVariable(in) };
+        return new OperationVariable[0];
     }
 }
