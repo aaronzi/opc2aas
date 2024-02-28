@@ -31,7 +31,8 @@ import org.eclipse.digitaltwin.basyx.opc2aas.OpcToAas;
 
 public class SubmodelFactory {
 
-    private static final String DATA_BRIDGE_CONFIG_FOLDER = "DataBridgeConfig";
+    public static final String AASX_PATH = "AasEnvConfig/aas_environment.aasx";
+    public static final String DATA_BRIDGE_FOLDER = "DataBridgeConfig";
     public static Submodel creationSubmodel() {
         List<LangStringTextType> description = new ArrayList<LangStringTextType>();
         description.add(new DefaultLangStringTextType.Builder().language("de-DE")
@@ -67,6 +68,7 @@ public class SubmodelFactory {
     }
 
     public static Submodel outputSubmodel() {
+
         List<LangStringTextType> description = new ArrayList<LangStringTextType>();
         description.add(new DefaultLangStringTextType.Builder().language("de-DE")
                 .text("OutputSubmodel")
@@ -127,7 +129,7 @@ public class SubmodelFactory {
         return submodel;
     }
 
-    private static Operation createAASFromOPCNodeStructure() {
+    public static Operation createAASFromOPCNodeStructure() {
         return new InvokableOperation.Builder()
                 .idShort("AASfromOPC")
                 .inputVariables(Arrays.asList(createStringOperationVariable("aasIdShort"),
@@ -135,6 +137,12 @@ public class SubmodelFactory {
                         createStringOperationVariable("opcServerUrl"),
                         createStringOperationVariable("opcUsername"),
                         createStringOperationVariable("opcPassword")))
+                .invokable(SubmodelFactory::creation)
+                .build();
+    }
+    private static Operation createInvokableOperation() {
+        return new InvokableOperation.Builder()
+                .idShort("translateOperation")
                 .invokable(SubmodelFactory::creation)
                 .build();
     }
@@ -147,7 +155,7 @@ public class SubmodelFactory {
         return new DefaultOperationVariable.Builder().value(new DefaultProperty.Builder().idShort(idShort).valueType(DataTypeDefXsd.STRING).build()).build();
     }
 
-    private static OperationVariable[] creation(OperationVariable[] inputs) {
+    public static OperationVariable[] creation(OperationVariable[] inputs) {
 
         String aasIdShort = ((Property) inputs[0].getValue()).getValue();
         String opcNodeId = ((Property) inputs[1].getValue()).getValue();

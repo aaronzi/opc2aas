@@ -20,11 +20,11 @@ import submodel.SubmodelFactory;
 
 public class OpcToAas {
     private static final Logger logger = LoggerFactory.getLogger(OpcToAas.class);
-    String aasIdShort;
-    String opcNodeId;
-    String opcServerUrl;
-    String opcUsername;
-    String opcPassword;
+    private static String aasIdShort;
+    private static String opcNodeId;
+    private static String opcServerUrl;
+    private static String opcUsername;
+    private static String opcPassword;
 
     /**
      * The main method of the application.
@@ -35,7 +35,10 @@ public class OpcToAas {
         try {
             System.out.println("hello");
             logger.info("OPC2AAS started");
-            SubmodelFactory.creationSubmodel();
+            //SubmodelFactory creationsubmodel = new SubmodelFactory();
+            //String[] inputs = creationsubmodel.
+            SubmodelFactory.creationSubmodel(); // Calling the creationSubmodel Method
+            //SubmodelFactory.createAASFromOPCNodeStructure();
             System.out.println("hello2");
             System.out.println("hello3");
             initializeDataBridgeConfig();
@@ -53,13 +56,33 @@ public class OpcToAas {
     }
     public static void processOperation(String aasIdShort, String opcNodeId, String opcServerUrl, String opcUsername, String opcPassword) {
         // The input parameters
-        System.out.println("Received input parameters:");
-        System.out.println("aasIdShort: " + aasIdShort);
-        System.out.println("opcNodeId: " + opcNodeId);
-        System.out.println("opcServerUrl: " + opcServerUrl);
-        System.out.println("opcUsername: " + opcUsername);
-        System.out.println("opcPassword: " + opcPassword);
+        OpcToAas.aasIdShort = aasIdShort;
+        OpcToAas.opcNodeId = opcNodeId;
+        OpcToAas.opcServerUrl = opcServerUrl;
+        OpcToAas.opcUsername = opcUsername;
+        OpcToAas.opcPassword = opcPassword;
+        System.out.println(opcServerUrl);
     }
+    //public static String getaasId() {
+    //   return aasIdShort;
+    //}
+
+    //public static String getNodeId() {
+    //    return opcNodeId;
+    //}
+
+    //public static String getServerUrl() {
+    //    return opcServerUrl;
+    //}
+
+    //public static String getUsername() {
+    //    return opcUsername;
+    //}
+
+    //public static String getPassword() {
+    //    return opcPassword;
+    //}
+
 
     /**
      * Initializes the DataBridge configuration files.
@@ -79,10 +102,10 @@ public class OpcToAas {
      */
     private static OpcUaClient createOpcUaClientConnection() throws Exception {
         System.out.println("hello6");
-        String opcServerUrl = System.getenv("opcServerUrl"); // URL of the OPC UA server
-        String opcUsername = System.getenv("opcUsername"); // username for the OPC UA server
-        String opcPassword = System.getenv("opcPassword"); // password for the OPC UA server
-        System.out.println("hello7");
+        opcServerUrl = System.getenv("opcServerUrl"); // URL of the OPC UA server
+        opcUsername = System.getenv("opcUsername"); // username for the OPC UA server
+        opcPassword = System.getenv("opcPassword"); // password for the OPC UA server
+        System.out.println(opcServerUrl);
         OpcUaClient client = OpcUtils.createClientConnection(opcServerUrl, opcUsername, opcPassword);
         System.out.println("hello8");
         logger.info("OPC UA client connection created");
