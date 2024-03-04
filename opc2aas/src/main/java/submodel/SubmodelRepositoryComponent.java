@@ -10,6 +10,7 @@ import org.eclipse.digitaltwin.basyx.submodelservice.feature.DecoratedSubmodelSe
 import org.eclipse.digitaltwin.basyx.submodelservice.feature.SubmodelServiceFeature;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.eclipse.digitaltwin.basyx.submodelrepository.SubmodelRepository;
 import org.eclipse.digitaltwin.basyx.submodelrepository.SubmodelRepositoryFactory;
@@ -24,21 +25,11 @@ import java.util.List;
         exclude = { MongoAutoConfiguration.class, MongoDataAutoConfiguration.class })
 public class SubmodelRepositoryComponent {
     public static void main(String[] args) {
-        SpringApplication.run(SubmodelRepositoryComponent.class, args);
-        OpcToAas.main(args);
+        ApplicationContext context= SpringApplication.run(SubmodelRepositoryComponent.class, args);
+        SubmodelRepository repo = context.getBean(SubmodelRepository.class);
+        repo.createSubmodel(SubmodelFactory.creationSubmodel());
+        repo.createSubmodel(SubmodelFactory.outputSubmodel());
     }
-    @Bean
-    @ConditionalOnMissingBean
-    public SubmodelRepository getSubmodelRepository(SubmodelRepositoryFactory aasRepositoryFactory, List<SubmodelRepositoryFeature> features) {
-        return new DecoratedSubmodelRepositoryFactory(aasRepositoryFactory, features).create();
-    }
-
-    @Primary
-    @Bean
-    public SubmodelServiceFactory getSubmodelServiceFactory(SubmodelServiceFactory aasServiceFactory, List<SubmodelServiceFeature> features) {
-        return new DecoratedSubmodelServiceFactory(aasServiceFactory, features);
-    }
-
 
 
 }

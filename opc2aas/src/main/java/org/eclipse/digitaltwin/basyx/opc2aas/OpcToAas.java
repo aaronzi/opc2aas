@@ -1,10 +1,7 @@
 package org.eclipse.digitaltwin.basyx.opc2aas;
 
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -50,6 +47,7 @@ public class OpcToAas {
             exportAasAsFile(generatedAAS);
             logger.info("AAS saved to aas_environment.aasx");
             SubmodelFactory.outputSubmodel();
+            outputFiles();
         } catch (Exception e) {
             logger.error("An error occurred during the runtime of OPC2AAS: ", e);
         }
@@ -82,7 +80,48 @@ public class OpcToAas {
     //public static String getPassword() {
     //    return opcPassword;
     //}
+    private static void outputFiles(){
+        String[] sourceFileNames = {"opcuaconsumer.json", "jsonataExtractValue.json", "jsonatatransformer.json", "jsonjacksontransformer.json", "aasserver.json", "routes.json"};
+        String[] destinationFileNames = {"OPCUAConsumerFile.json", "ExtractValueFile.json", "JsonataTransformerFile.json", "JsonJacksonTransformerFile.json", "AASServerFile.json", "RoutesFile.json"};
+        String sourceFolder = "DataBridgeConfig";
+        String destinationFolder = "OuputFiles";
 
+        String aasFileName = "aas_environment.aasx";
+        String aasDestinationFileName = "GeneratedAAS.aasx";
+        String aasSourceFolder = "AasEnvConfig";
+
+        // Create destination folder if it doesn't exist
+        File destFolder = new File(destinationFolder);
+        if (!destFolder.exists()) {
+            destFolder.mkdirs();
+        }
+
+        // Copy data from source files to destination files
+        for (int i = 0; i < sourceFileNames.length; i++) {
+            String sourceFilePath = sourceFolder + File.separator + sourceFileNames[i];
+            String destinationFilePath = destinationFolder + File.separator + destinationFileNames[i];
+            copyFile(sourceFilePath, destinationFilePath);
+        }
+
+        // Copy additional file
+        String additionalSourceFilePath = aasSourceFolder + File.separator + aasFileName;
+        String additionalDestinationFilePath = destinationFolder + File.separator + aasDestinationFileName;
+        copyFile(additionalSourceFilePath, additionalDestinationFilePath);
+    }
+
+    private static void copyFile(String sourceFilePath, String destinationFilePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(sourceFilePath));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(destinationFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                writer.write(line);
+                writer.newLine();
+            }
+            System.out.println("Copied from " + sourceFilePath + " to " + destinationFilePath);
+        } catch (IOException e) {
+            System.err.println("Error copying file: " + e.getMessage());
+        }
+    }
 
     /**
      * Initializes the DataBridge configuration files.

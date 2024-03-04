@@ -81,38 +81,39 @@ public class SubmodelFactory {
         refKeys.add(new DefaultKey.Builder().value("123")
                 .build());
 
+
         SubmodelElement generatedAAS = new DefaultProperty.Builder()
-                .value("123")
-                .idShort("test")
+                .value("aas")
+                .idShort("aas")
                 .build();
         SubmodelElement OPCUAConsumerFile = new DefaultProperty.Builder()
-                .value("123")
-                .idShort("test")
+                .value("consumerFile")
+                .idShort("consumerFile")
                 .build();
         SubmodelElement ExtractValueFile = new DefaultProperty.Builder()
-                .value("123")
-                .idShort("test")
+                .value("extractvalue")
+                .idShort("extractvalue")
                 .build();
         SubmodelElement JsonataTransformerFile = new DefaultProperty.Builder()
-                .value("123")
-                .idShort("test")
+                .value("jsonatatransformer")
+                .idShort("jsonatatransformer")
                 .build();
         SubmodelElement JsonJacksonTransformerFile = new DefaultProperty.Builder()
-                .value("123")
-                .idShort("test")
+                .value("jacksontransformer")
+                .idShort("jacksontransformer")
                 .build();
         SubmodelElement AASServerFile = new DefaultProperty.Builder()
-                .value("123")
-                .idShort("test")
+                .value("aasserver")
+                .idShort("aasserver")
                 .build();
         SubmodelElement RoutesFile = new DefaultProperty.Builder()
-                .value("123")
-                .idShort("test")
+                .value("route")
+                .idShort("route")
                 .build();
-        Operation creation = createAASFromOPCNodeStructure();
+        //Operation creation = createAASFromOPCNodeStructure();
         List<SubmodelElement> smeList = Arrays.asList(generatedAAS, OPCUAConsumerFile,
                 ExtractValueFile, JsonataTransformerFile, JsonJacksonTransformerFile,
-                AASServerFile, RoutesFile, creation);
+                AASServerFile, RoutesFile);
 
         Submodel submodel = new DefaultSubmodel.Builder().category("TestCategory")
                 .description(description)
@@ -124,7 +125,6 @@ public class SubmodelFactory {
                         .build())
                 .submodelElements(smeList)
                 .build();
-
 
         return submodel;
     }
