@@ -21,12 +21,15 @@ import org.springframework.context.annotation.Primary;
 import java.util.List;
 
 @SpringBootApplication(
-        scanBasePackages = {"org.eclipse.digitaltwin.basyx", "submodel", "org.eclipse.digitaltwin.basyx.opc2aas.OpcToAas"},
+        scanBasePackages = {"org.eclipse.digitaltwin.basyx", "org.eclipse.digitaltwin.basyx.opc2aas"},
         exclude = { MongoAutoConfiguration.class, MongoDataAutoConfiguration.class })
 public class SubmodelRepositoryComponent {
     public static void main(String[] args) {
+        System.out.println("Hello0");
         ApplicationContext context= SpringApplication.run(SubmodelRepositoryComponent.class, args);
+        System.out.println("Hello1");
         SubmodelRepository repo = context.getBean(SubmodelRepository.class);
+        System.out.println("Hello2");
         repo.createSubmodel(SubmodelFactory.creationSubmodel());
         repo.createSubmodel(SubmodelFactory.outputSubmodel());
     }
