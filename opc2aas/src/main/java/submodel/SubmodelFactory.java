@@ -1,5 +1,6 @@
 package submodel;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,13 +20,7 @@ import org.eclipse.digitaltwin.aas4j.v3.model.OperationVariable;
 import org.eclipse.digitaltwin.aas4j.v3.model.Property;
 import org.eclipse.digitaltwin.aas4j.v3.model.Submodel;
 import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
-import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultKey;
-import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultLangStringNameType;
-import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultLangStringTextType;
-import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultOperationVariable;
-import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultProperty;
-import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultReference;
-import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodel;
+import org.eclipse.digitaltwin.aas4j.v3.model.impl.*;
 import org.eclipse.digitaltwin.basyx.InvokableOperation;
 import org.eclipse.digitaltwin.basyx.opc2aas.OpcToAas;
 
@@ -66,8 +61,20 @@ public class SubmodelFactory {
 
         return submodel;
     }
+    private static String readFileAsString(String filePath) throws IOException {
+        byte[] bytes = Files.readAllBytes(Paths.get(filePath));
+        return new String(bytes);
+    }
 
-    public static Submodel outputSubmodel() {
+    public static Submodel outputSubmodel() throws IOException {
+        String aas = readFileAsString(AASX_PATH);
+        String consumerFile = readFileAsString("DataBridgeConfig/opcuaconsumer.json");
+        String extractvalue = readFileAsString("DataBridgeConfig/jsonataExtractValue.json");
+        String jsonatatransformer = readFileAsString("DataBridgeConfig/jsonatatransformer.json");
+        String jacksontransformer = readFileAsString("DataBridgeConfig/jsonjacksontransformer.json");
+        String aasserver = readFileAsString("DataBridgeConfig/aasserver.json");
+        String route = readFileAsString("DataBridgeConfig/routes.json");
+
 
         List<LangStringTextType> description = new ArrayList<LangStringTextType>();
         description.add(new DefaultLangStringTextType.Builder().language("de-DE")
@@ -81,33 +88,37 @@ public class SubmodelFactory {
         refKeys.add(new DefaultKey.Builder().value("123")
                 .build());
 
-
-        SubmodelElement generatedAAS = new DefaultProperty.Builder()
-                .value("aas")
+        SubmodelElement test = new DefaultFile.Builder()
+                .value("")
+                .idShort("id")
+                .build();
+        SubmodelElement generatedAAS = new DefaultFile.Builder()
+                .value(aas)
                 .idShort("aas")
                 .build();
-        SubmodelElement OPCUAConsumerFile = new DefaultProperty.Builder()
-                .value("consumerFile")
+        SubmodelElement OPCUAConsumerFile = new DefaultFile.Builder()
+                .value(consumerFile)
                 .idShort("consumerFile")
                 .build();
-        SubmodelElement ExtractValueFile = new DefaultProperty.Builder()
-                .value("extractvalue")
+        SubmodelElement ExtractValueFile = new DefaultFile.Builder()
+                .value(extractvalue)
                 .idShort("extractvalue")
                 .build();
-        SubmodelElement JsonataTransformerFile = new DefaultProperty.Builder()
-                .value("jsonatatransformer")
+        SubmodelElement JsonataTransformerFile = new DefaultFile.Builder()
+                .value(jsonatatransformer)
                 .idShort("jsonatatransformer")
                 .build();
-        SubmodelElement JsonJacksonTransformerFile = new DefaultProperty.Builder()
-                .value("jacksontransformer")
+
+        SubmodelElement JsonJacksonTransformerFile = new DefaultFile.Builder()
+                .value(jacksontransformer)
                 .idShort("jacksontransformer")
                 .build();
-        SubmodelElement AASServerFile = new DefaultProperty.Builder()
-                .value("aasserver")
+        SubmodelElement AASServerFile = new DefaultFile.Builder()
+                .value(aasserver)
                 .idShort("aasserver")
                 .build();
-        SubmodelElement RoutesFile = new DefaultProperty.Builder()
-                .value("route")
+        SubmodelElement RoutesFile = new DefaultFile.Builder()
+                .value(route)
                 .idShort("route")
                 .build();
         //Operation creation = createAASFromOPCNodeStructure();
@@ -162,6 +173,7 @@ public class SubmodelFactory {
         String opcServerUrl = ((Property) inputs[2].getValue()).getValue();
         String opcUsername = ((Property) inputs[3].getValue()).getValue();
         String opcPassword = ((Property) inputs[4].getValue()).getValue();
+
    //         in.setIdShort("result");
    //         results[i] = createOperationVariable(in);
 

@@ -23,31 +23,34 @@ public class OpcToAas {
     private static String opcUsername;
     private static String opcPassword;
 
+
     /**
      * The main method of the application.
      *
      * @param args The command line arguments.
      */
-    public static void main(String[] args) {
+    public static void main() {
         try {
             System.out.println("hello");
             logger.info("OPC2AAS started");
             //SubmodelFactory creationsubmodel = new SubmodelFactory();
             //String[] inputs = creationsubmodel.
-            SubmodelFactory.creationSubmodel(); // Calling the creationSubmodel Method
+            //SubmodelFactory.creationSubmodel(); // Calling the creationSubmodel Method
             //SubmodelFactory.createAASFromOPCNodeStructure();
             System.out.println("hello2");
             System.out.println("hello3");
+
             initializeDataBridgeConfig();
             System.out.println("hello4");
             OpcUaClient client = createOpcUaClientConnection();
             System.out.println("hello5");
+
             NodeInfo subTree = readOpcUaSubtree(client);
             Environment generatedAAS = createAasEnvironment(client, subTree);
             exportAasAsFile(generatedAAS);
             logger.info("AAS saved to aas_environment.aasx");
             SubmodelFactory.outputSubmodel();
-            outputFiles();
+
         } catch (Exception e) {
             logger.error("An error occurred during the runtime of OPC2AAS: ", e);
         }
@@ -59,69 +62,11 @@ public class OpcToAas {
         OpcToAas.opcServerUrl = opcServerUrl;
         OpcToAas.opcUsername = opcUsername;
         OpcToAas.opcPassword = opcPassword;
-        System.out.println(opcServerUrl);
-    }
-    //public static String getaasId() {
-    //   return aasIdShort;
-    //}
+        main();
 
-    //public static String getNodeId() {
-    //    return opcNodeId;
-    //}
-
-    //public static String getServerUrl() {
-    //    return opcServerUrl;
-    //}
-
-    //public static String getUsername() {
-    //    return opcUsername;
-    //}
-
-    //public static String getPassword() {
-    //    return opcPassword;
-    //}
-    private static void outputFiles(){
-        String[] sourceFileNames = {"opcuaconsumer.json", "jsonataExtractValue.json", "jsonatatransformer.json", "jsonjacksontransformer.json", "aasserver.json", "routes.json"};
-        String[] destinationFileNames = {"OPCUAConsumerFile.json", "ExtractValueFile.json", "JsonataTransformerFile.json", "JsonJacksonTransformerFile.json", "AASServerFile.json", "RoutesFile.json"};
-        String sourceFolder = "DataBridgeConfig";
-        String destinationFolder = "OuputFiles";
-
-        String aasFileName = "aas_environment.aasx";
-        String aasDestinationFileName = "GeneratedAAS.aasx";
-        String aasSourceFolder = "AasEnvConfig";
-
-        // Create destination folder if it doesn't exist
-        File destFolder = new File(destinationFolder);
-        if (!destFolder.exists()) {
-            destFolder.mkdirs();
-        }
-
-        // Copy data from source files to destination files
-        for (int i = 0; i < sourceFileNames.length; i++) {
-            String sourceFilePath = sourceFolder + File.separator + sourceFileNames[i];
-            String destinationFilePath = destinationFolder + File.separator + destinationFileNames[i];
-            copyFile(sourceFilePath, destinationFilePath);
-        }
-
-        // Copy additional file
-        String additionalSourceFilePath = aasSourceFolder + File.separator + aasFileName;
-        String additionalDestinationFilePath = destinationFolder + File.separator + aasDestinationFileName;
-        copyFile(additionalSourceFilePath, additionalDestinationFilePath);
     }
 
-    private static void copyFile(String sourceFilePath, String destinationFilePath) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(sourceFilePath));
-             BufferedWriter writer = new BufferedWriter(new FileWriter(destinationFilePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                writer.write(line);
-                writer.newLine();
-            }
-            System.out.println("Copied from " + sourceFilePath + " to " + destinationFilePath);
-        } catch (IOException e) {
-            System.err.println("Error copying file: " + e.getMessage());
-        }
-    }
+
 
     /**
      * Initializes the DataBridge configuration files.
