@@ -1,1 +1,28 @@
-[]
+[ {
+  "uniqueId" : "ea2bdf195e7eff9fbcbebee5ec769b51c8c1d385ad69d9cd0e2762dab10d907c",
+  "serverUrl" : "host.docker.internal",
+  "serverPort" : 4840,
+  "pathToService" : "",
+  "nodeInformation" : "ns=2;i=4",
+  "username" : "test",
+  "password" : "test",
+  "requestPublishInterval" : 1000
+}, {
+  "uniqueId" : "0ce5e6e34fcd0d7f45e7ba0ffb3de114dc312db1ffddec03af992d72d8f80b98",
+  "serverUrl" : "host.docker.internal",
+  "serverPort" : 4840,
+  "pathToService" : "",
+  "nodeInformation" : "ns=2;s=MyStringNodeIdVar2",
+  "username" : "test",
+  "password" : "test",
+  "requestPublishInterval" : 1000
+}, {
+  "uniqueId" : "95ede4f9f1afa3e37178edfac056b06cd6eff0742beb56a79b293cecf9251884",
+  "serverUrl" : "host.docker.internal",
+  "serverPort" : 4840,
+  "pathToService" : "",
+  "nodeInformation" : "ns=2;g=cfdbbd76-c188-478c-b10c-77a1acf441f6",
+  "username" : "test",
+  "password" : "test",
+  "requestPublishInterval" : 1000
+} ]

@@ -147,7 +147,8 @@ public class SubmodelFactory {
                         createStringOperationVariable("opcNodeId"),
                         createStringOperationVariable("opcServerUrl"),
                         createStringOperationVariable("opcUsername"),
-                        createStringOperationVariable("opcPassword")))
+                        createStringOperationVariable("opcPassword"),
+                        createStringOperationVariable("submodelRepoUrl")))
                 .invokable(SubmodelFactory::creation)
                 .build();
     }
@@ -173,11 +174,12 @@ public class SubmodelFactory {
         String opcServerUrl = ((Property) inputs[2].getValue()).getValue();
         String opcUsername = ((Property) inputs[3].getValue()).getValue();
         String opcPassword = ((Property) inputs[4].getValue()).getValue();
+        String submodelRepoUrl = ((Property) inputs[5].getValue()).getValue();
 
    //         in.setIdShort("result");
    //         results[i] = createOperationVariable(in);
 
-        OpcToAas.processOperation(aasIdShort, opcNodeId, opcServerUrl, opcUsername, opcPassword);
+        OpcToAas.processOperation(aasIdShort, opcNodeId, opcServerUrl, opcUsername, opcPassword, submodelRepoUrl);
 
 
         //Integer squared = val * val;

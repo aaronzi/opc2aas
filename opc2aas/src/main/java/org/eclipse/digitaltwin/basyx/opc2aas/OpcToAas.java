@@ -22,6 +22,7 @@ public class OpcToAas {
     private static String opcServerUrl;
     private static String opcUsername;
     private static String opcPassword;
+    private static String submodelRepositoryUrl;
 
 
     /**
@@ -31,22 +32,16 @@ public class OpcToAas {
      */
     public static void main() {
         try {
-            System.out.println("hello");
+
             logger.info("OPC2AAS started");
-            //SubmodelFactory creationsubmodel = new SubmodelFactory();
-            //String[] inputs = creationsubmodel.
-            //SubmodelFactory.creationSubmodel(); // Calling the creationSubmodel Method
-            //SubmodelFactory.createAASFromOPCNodeStructure();
-            System.out.println("hello2");
-            System.out.println("hello3");
 
             initializeDataBridgeConfig();
-            System.out.println("hello4");
+
             OpcUaClient client = createOpcUaClientConnection();
-            System.out.println("hello5");
 
             NodeInfo subTree = readOpcUaSubtree(client);
             Environment generatedAAS = createAasEnvironment(client, subTree);
+
             exportAasAsFile(generatedAAS);
             logger.info("AAS saved to aas_environment.aasx");
             SubmodelFactory.outputSubmodel();
@@ -55,13 +50,14 @@ public class OpcToAas {
             logger.error("An error occurred during the runtime of OPC2AAS: ", e);
         }
     }
-    public static void processOperation(String aasIdShort, String opcNodeId, String opcServerUrl, String opcUsername, String opcPassword) {
+    public static void processOperation(String aasIdShort, String opcNodeId, String opcServerUrl, String opcUsername, String opcPassword, String submodelRepositoryUrl) {
         // The input parameters
         OpcToAas.aasIdShort = aasIdShort;
         OpcToAas.opcNodeId = opcNodeId;
         OpcToAas.opcServerUrl = opcServerUrl;
         OpcToAas.opcUsername = opcUsername;
         OpcToAas.opcPassword = opcPassword;
+        OpcToAas.submodelRepositoryUrl = submodelRepositoryUrl;
         main();
 
     }
@@ -85,13 +81,10 @@ public class OpcToAas {
      * @throws Exception If the connection cannot be created.
      */
     private static OpcUaClient createOpcUaClientConnection() throws Exception {
-        System.out.println("hello6");
-        opcServerUrl = System.getenv("opcServerUrl"); // URL of the OPC UA server
-        opcUsername = System.getenv("opcUsername"); // username for the OPC UA server
-        opcPassword = System.getenv("opcPassword"); // password for the OPC UA server
+
         System.out.println(opcServerUrl);
         OpcUaClient client = OpcUtils.createClientConnection(opcServerUrl, opcUsername, opcPassword);
-        System.out.println("hello8");
+
         logger.info("OPC UA client connection created");
         return client;
     }
@@ -105,9 +98,9 @@ public class OpcToAas {
      */
     private static NodeInfo readOpcUaSubtree(OpcUaClient client) throws Exception {
         // specify the NodeId of the starting node
-        NodeId opcNodeId = OpcUtils.stringToNodeId(System.getenv("START_NODE_ID"));
+        NodeId nodeId = OpcUtils.stringToNodeId(opcNodeId); //String NodeId is taken from Submodel and converted to NodeID type
         // read the subtree starting from the specified starting node
-        NodeInfo subTree = OpcUtils.readEntireSubtree(client, opcNodeId);
+        NodeInfo subTree = OpcUtils.readEntireSubtree(client, nodeId);
         logger.info("OPC UA subtree read");
 
         return subTree;
@@ -123,14 +116,10 @@ public class OpcToAas {
      */
     private static Environment createAasEnvironment(OpcUaClient client, NodeInfo subTree) throws Exception {
         String serverApplicationUri = OpcUtils.getServerApplicationUri(client);
-        String submodelRepositoryUrl = System.getenv("SUBMODEL_REPOSITORY_URL");
         System.out.println(submodelRepositoryUrl);
         System.out.println("hello");
-        String aasIdShort = System.getenv("AAS_ID_SHORT");
-        String opcServerUrl = System.getenv("ENDPOINT_URL"); // URL of the OPC UA server
-        String opcUsername = System.getenv("USERNAME"); // username for the OPC UA server
-        String opcPassword = System.getenv("PASSWORD"); // password for the OPC UA server
         Environment environment = AasBuilder.createEnvironment(aasIdShort, serverApplicationUri, subTree, opcServerUrl, opcUsername, opcPassword, submodelRepositoryUrl);
+        System.out.println("Is it working?");
         logger.info("AAS created");
         return environment;
     }

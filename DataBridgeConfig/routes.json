@@ -1,1 +1,16 @@
-[]
+[ {
+  "datasource" : "ea2bdf195e7eff9fbcbebee5ec769b51c8c1d385ad69d9cd0e2762dab10d907c",
+  "transformers" : [ "dataValueToJson", "jsonataExtractValue" ],
+  "datasinks" : [ "b7a9791641446e4fd3e0d2de3f336a94145ce9fd0d3736a662d52b770600f2ec" ],
+  "trigger" : "event"
+}, {
+  "datasource" : "0ce5e6e34fcd0d7f45e7ba0ffb3de114dc312db1ffddec03af992d72d8f80b98",
+  "transformers" : [ "dataValueToJson", "jsonataExtractValue" ],
+  "datasinks" : [ "273471c7c3158d732cfb9fdfe21bde212ba3e3e44d788b31114ac338c12fb3ef" ],
+  "trigger" : "event"
+}, {
+  "datasource" : "95ede4f9f1afa3e37178edfac056b06cd6eff0742beb56a79b293cecf9251884",
+  "transformers" : [ "dataValueToJson", "jsonataExtractValue" ],
+  "datasinks" : [ "a8355019b5b3ede573b19a2835c820c0352104384ba74f4023f597a29f5e6285" ],
+  "trigger" : "event"
+} ]

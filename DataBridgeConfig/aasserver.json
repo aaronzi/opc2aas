@@ -1,1 +1,16 @@
-[]
+[ {
+  "uniqueId" : "b7a9791641446e4fd3e0d2de3f336a94145ce9fd0d3736a662d52b770600f2ec",
+  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzRkNjNmNzU1LWEwNjMtNDVhZS04MmE5LTVjMjg2Yzg4OWRkOQ==",
+  "idShortPath" : "MyFolder.MyObject.Var1",
+  "api" : "DotAAS-V3"
+}, {
+  "uniqueId" : "273471c7c3158d732cfb9fdfe21bde212ba3e3e44d788b31114ac338c12fb3ef",
+  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzRkNjNmNzU1LWEwNjMtNDVhZS04MmE5LTVjMjg2Yzg4OWRkOQ==",
+  "idShortPath" : "MyFolder.MyObject.Var2",
+  "api" : "DotAAS-V3"
+}, {
+  "uniqueId" : "a8355019b5b3ede573b19a2835c820c0352104384ba74f4023f597a29f5e6285",
+  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzRkNjNmNzU1LWEwNjMtNDVhZS04MmE5LTVjMjg2Yzg4OWRkOQ==",
+  "idShortPath" : "MyFolder.MyObject.Var3",
+  "api" : "DotAAS-V3"
+} ]

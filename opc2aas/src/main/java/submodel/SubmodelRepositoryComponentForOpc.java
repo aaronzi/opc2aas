@@ -16,17 +16,12 @@ import java.io.IOException;
 public class SubmodelRepositoryComponentForOpc {
     public static void main(String[] args) throws IOException {
 
-            System.out.println("Hello0");
+
             ApplicationContext context= SpringApplication.run(SubmodelRepositoryComponentForOpc.class, args);
-            System.out.println("Hello1");
+
             SubmodelRepository repo = context.getBean(SubmodelRepository.class);
-            //OpcToAas opc = new OpcToAas();
 
-
-            System.out.println("Hello2");
             repo.createSubmodel(SubmodelFactory.creationSubmodel());
-            //opc.main();
-            System.out.println("Hello3");
             repo.createSubmodel(SubmodelFactory.outputSubmodel());
 
 
