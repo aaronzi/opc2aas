@@ -17,11 +17,47 @@
   "password" : "test",
   "requestPublishInterval" : 1000
 }, {
-  "uniqueId" : "95ede4f9f1afa3e37178edfac056b06cd6eff0742beb56a79b293cecf9251884",
+  "uniqueId" : "588998ca837bdc956274b58de072395d7e36afa2098db8576c8ec050106943ba",
   "serverUrl" : "host.docker.internal",
   "serverPort" : 4840,
   "pathToService" : "",
-  "nodeInformation" : "ns=2;g=cfdbbd76-c188-478c-b10c-77a1acf441f6",
+  "nodeInformation" : "ns=2;g=daba2325-3b01-4db3-a4c2-0083870e3b60",
+  "username" : "test",
+  "password" : "test",
+  "requestPublishInterval" : 1000
+}, {
+  "uniqueId" : "829e8198d7a2773108458846e04380fc41ff0ef18657bca42911ba315c3e1ec0",
+  "serverUrl" : "host.docker.internal",
+  "serverPort" : 4840,
+  "pathToService" : "",
+  "nodeInformation" : "ns=2;b=TXlCaW5hcnlOb2RlSWRWYXI0",
+  "username" : "test",
+  "password" : "test",
+  "requestPublishInterval" : 1000
+}, {
+  "uniqueId" : "7fa0f3bb37d3e5c697d2af3be0a2a01d62d6bf5e2594848dd4064d4f33cc512d",
+  "serverUrl" : "host.docker.internal",
+  "serverPort" : 4840,
+  "pathToService" : "",
+  "nodeInformation" : "ns=2;i=6",
+  "username" : "test",
+  "password" : "test",
+  "requestPublishInterval" : 1000
+}, {
+  "uniqueId" : "56871633ab9bee6ed9cdac302948721850a9369de993ecd853a47477e500f09c",
+  "serverUrl" : "host.docker.internal",
+  "serverPort" : 4840,
+  "pathToService" : "",
+  "nodeInformation" : "ns=2;i=10",
+  "username" : "test",
+  "password" : "test",
+  "requestPublishInterval" : 1000
+}, {
+  "uniqueId" : "0ecae1bde24fcfab0031de0f9551ec924473ecbb421ba883dea5d60620b8496e",
+  "serverUrl" : "host.docker.internal",
+  "serverPort" : 4840,
+  "pathToService" : "",
+  "nodeInformation" : "ns=2;i=13",
   "username" : "test",
   "password" : "test",
   "requestPublishInterval" : 1000
