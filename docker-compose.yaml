@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  opc2aas:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: opc2aas:latest
+    ports:
+      - "8081:8081"
+    volumes:
+      - /Users/abdullahilkafi/Work/Projects/opc2aas/AasEnvConfig:/app/AasEnvConfig
+      - /Users/abdullahilkafi/Work/Projects/opc2aas/DataBridgeConfig:/app/DataBridgeConfig
+
+  opc-ua-testserver:
+    image: mcr.microsoft.com/iot/opc-ua-test-server:latest
+    ports:
+      - "4841:4840"
+  databridge:
+    image: eclipsebasyx/databridge:1.0.0-SNAPSHOT
+    ports:
+      - "8086:8085"
+  registry:
+    image: eclipsebasyx/aas-registry:1.5.1
+    ports:
+      - "8082:4000"
+  aas-environment:
+    image: eclipsebasyx/aas-server:1.5.1
+    ports:
+      - "8085:4001"

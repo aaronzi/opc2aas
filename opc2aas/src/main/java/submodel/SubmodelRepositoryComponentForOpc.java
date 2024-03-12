@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import java.io.IOException;
 
 @SpringBootApplication(
-        scanBasePackages = {"org.eclipse.digitaltwin.basyx", "org.eclipse.digitaltwin.basyx.opc2aas"},
+        scanBasePackages = {"org.eclipse.digitaltwin.basyx", "org.eclipse.digitaltwin.basyx.opc2aas", "submodel"},
         exclude = { MongoAutoConfiguration.class, MongoDataAutoConfiguration.class })
 //@ComponentScan("org.eclipse.digitaltwin.basyx")
 public class SubmodelRepositoryComponentForOpc {
