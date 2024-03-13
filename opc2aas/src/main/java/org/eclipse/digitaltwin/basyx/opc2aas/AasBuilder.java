@@ -94,6 +94,31 @@ public class AasBuilder {
                         .build())
                 .build();
     }
+    public static AssetAdministrationShell createNewAAS(String aasIdShort, String serverApplicationUri){
+        return new DefaultAssetAdministrationShell.Builder()
+                .idShort(aasIdShort)
+                .id(createIdentifier("aas"))
+                .assetInformation(new DefaultAssetInformation.Builder()
+                        .assetKind(AssetKind.INSTANCE)
+                        .globalAssetId(createGlobalId(11, "asset"))
+                        .specificAssetIds(new DefaultSpecificAssetId.Builder()
+                                .name("OpcUaServerID")
+                                .value(serverApplicationUri)
+                                .externalSubjectId(new DefaultReference.Builder()
+                                        .keys(new DefaultKey.Builder()
+                                                .type(KeyTypes.GLOBAL_REFERENCE)
+                                                .value(createGlobalId(11, "Systems"))
+                                                .build())
+                                        .type(ReferenceTypes.EXTERNAL_REFERENCE)
+                                        .build())
+                                .build())
+                        .defaultThumbnail(new DefaultResource.Builder()
+                                .contentType("image/jpg")
+                                .path("https://opcfoundation.org/wp-content/themes/opc/images/logo.jpg")
+                                .build())
+                        .build())
+                .build();
+    }
 
     /**
      * Creates a Submodel from an OPC UA subtree.
@@ -499,16 +524,23 @@ public class AasBuilder {
      * @param submodelRepositoryUrl The URL of the Submodel Repository.
      * @return The created environment.
      */
-    public static Environment createEnvironment(String aasIdShort, String serverApplicationUri, NodeInfo subTree, String endpointUrl, String username, String password, String submodelRepositoryUrl) throws IOException {
+    public static Environment createEnvironment(String aasIdShort, String serverApplicationUri, NodeInfo subTree, String endpointUrl, String username, String password, String submodelRepositoryUrl){
+
+        return new DefaultEnvironment.Builder()
+                .assetAdministrationShells(createAAS(aasIdShort, serverApplicationUri))
+                .submodels(createSubmodelOpcUaTree(subTree, endpointUrl, username, password, submodelRepositoryUrl))
+                .conceptDescriptions(conceptDescriptions)
+                .build();
+    }
+    public static Environment createNewEnvironment(String aasIdShort, String serverApplicationUri, NodeInfo subTree, String endpointUrl, String username, String password, String submodelRepositoryUrl) throws IOException {
         Submodel creationSubmodel = SubmodelFactory.creationSubmodel();
         Submodel outputSubmodel = SubmodelFactory.outputSubmodel();
         List<Submodel> submodels = new ArrayList<>();
         submodels.add(creationSubmodel);
         submodels.add(outputSubmodel);
         return new DefaultEnvironment.Builder()
-                .assetAdministrationShells(createAAS(aasIdShort, serverApplicationUri))
+                .assetAdministrationShells(createNewAAS(aasIdShort, serverApplicationUri))
                 .submodels(submodels)
-                .submodels(createSubmodelOpcUaTree(subTree, endpointUrl, username, password, submodelRepositoryUrl))
                 .conceptDescriptions(conceptDescriptions)
                 .build();
     }

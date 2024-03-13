@@ -45,7 +45,9 @@ public class OpcToAas {
             Environment generatedAAS = createAasEnvironment(client, subTree);
 
             exportAasAsFile(generatedAAS);
-            logger.info("AAS saved to aas_environment.json");
+            Environment generatedNewAAS = createNewAasEnvironment(client,subTree);
+            exportAasAsJsonFile(generatedNewAAS);
+            logger.info("AAS saved to aas_environment.aasx");
             SubmodelFactory.outputSubmodel();
 
         } catch (Exception e) {
@@ -123,6 +125,13 @@ public class OpcToAas {
         return environment;
     }
 
+    private static Environment createNewAasEnvironment(OpcUaClient client, NodeInfo subTree) throws Exception {
+        String serverApplicationUri = OpcUtils.getServerApplicationUri(client);
+        Environment environment = AasBuilder.createNewEnvironment(aasIdShort, serverApplicationUri, subTree, opcServerUrl, opcUsername, opcPassword, submodelRepositoryUrl);
+        logger.info("New AAS created");
+        return environment;
+    }
+
     /**
      * Exports the AAS as a file.
      *
@@ -131,10 +140,10 @@ public class OpcToAas {
      * @throws SerializationException If the AAS cannot be serialized.
      */
     private static void exportAasAsFile(Environment environment) throws IOException, SerializationException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        new AASXSerializer().write(environment, new ArrayList<>(), out);
+        writeByteArrayToFile(out.toByteArray());
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonContent = objectMapper.writeValueAsString(environment);
-        writeStringToFile(jsonContent);
     }
 
     /**
@@ -143,6 +152,29 @@ public class OpcToAas {
      * @param content The byte array to write.
      * @throws IOException If the file cannot be written.
      */
+    private static void writeByteArrayToFile(byte[] content) throws IOException {
+        File envFolder = new File("AasEnvConfig");
+        if (!envFolder.exists() && !envFolder.mkdir()) {
+            logger.error("Failed to create directory: {}", envFolder.getAbsolutePath());
+            return;
+        }
+
+        File file = new File(envFolder, "aas_environment.aasx");
+
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(content);
+            logger.debug("Written content to file: {}", file.getAbsolutePath());
+        } catch (IOException e) {
+            logger.error("Error writing to file: {}", file.getAbsolutePath(), e);
+            throw e;
+        }
+    }
+
+    private static void exportAasAsJsonFile(Environment environment) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonContent = objectMapper.writeValueAsString(environment);
+        writeStringToFile(jsonContent);
+    }
     private static void writeStringToFile(String content) throws IOException {
         File envFolder = new File("AasEnvConfig");
         if (!envFolder.exists() && !envFolder.mkdir()) {
@@ -150,7 +182,7 @@ public class OpcToAas {
             return;
         }
 
-        File file = new File(envFolder, "aas_environment.json");
+        File file = new File(envFolder, "aas_new_environment.json");
 
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(content.getBytes());

@@ -88,10 +88,6 @@ public class SubmodelFactory {
         refKeys.add(new DefaultKey.Builder().value("123")
                 .build());
 
-        SubmodelElement test = new DefaultFile.Builder()
-                .value("")
-                .idShort("id")
-                .build();
         SubmodelElement generatedAAS = new DefaultFile.Builder()
                 .value(aas)
                 .idShort("aas")
