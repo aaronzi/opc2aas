@@ -15,6 +15,8 @@ import org.eclipse.digitaltwin.aas4j.v3.dataformat.SerializationException;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.aasx.AASXSerializer;
 import submodel.SubmodelFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class OpcToAas {
     private static final Logger logger = LoggerFactory.getLogger(OpcToAas.class);
     private static String aasIdShort;
@@ -43,7 +45,7 @@ public class OpcToAas {
             Environment generatedAAS = createAasEnvironment(client, subTree);
 
             exportAasAsFile(generatedAAS);
-            logger.info("AAS saved to aas_environment.aasx");
+            logger.info("AAS saved to aas_environment.json");
             SubmodelFactory.outputSubmodel();
 
         } catch (Exception e) {
@@ -116,10 +118,7 @@ public class OpcToAas {
      */
     private static Environment createAasEnvironment(OpcUaClient client, NodeInfo subTree) throws Exception {
         String serverApplicationUri = OpcUtils.getServerApplicationUri(client);
-        System.out.println(submodelRepositoryUrl);
-        System.out.println("hello");
         Environment environment = AasBuilder.createEnvironment(aasIdShort, serverApplicationUri, subTree, opcServerUrl, opcUsername, opcPassword, submodelRepositoryUrl);
-        System.out.println("Is it working?");
         logger.info("AAS created");
         return environment;
     }
@@ -132,9 +131,10 @@ public class OpcToAas {
      * @throws SerializationException If the AAS cannot be serialized.
      */
     private static void exportAasAsFile(Environment environment) throws IOException, SerializationException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        new AASXSerializer().write(environment, new ArrayList<>(), out);
-        writeByteArrayToFile(out.toByteArray());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonContent = objectMapper.writeValueAsString(environment);
+        writeStringToFile(jsonContent);
     }
 
     /**
@@ -143,21 +143,22 @@ public class OpcToAas {
      * @param content The byte array to write.
      * @throws IOException If the file cannot be written.
      */
-    private static void writeByteArrayToFile(byte[] content) throws IOException {
+    private static void writeStringToFile(String content) throws IOException {
         File envFolder = new File("AasEnvConfig");
         if (!envFolder.exists() && !envFolder.mkdir()) {
             logger.error("Failed to create directory: {}", envFolder.getAbsolutePath());
             return;
         }
 
-        File file = new File(envFolder, "aas_environment.aasx");
+        File file = new File(envFolder, "aas_environment.json");
 
         try (FileOutputStream fos = new FileOutputStream(file)) {
-            fos.write(content);
+            fos.write(content.getBytes());
             logger.debug("Written content to file: {}", file.getAbsolutePath());
         } catch (IOException e) {
             logger.error("Error writing to file: {}", file.getAbsolutePath(), e);
             throw e;
         }
     }
+
 }

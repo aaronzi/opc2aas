@@ -26,7 +26,7 @@ import org.eclipse.digitaltwin.basyx.opc2aas.OpcToAas;
 
 public class SubmodelFactory {
 
-    public static final String AASX_PATH = "AasEnvConfig/aas_environment.aasx";
+    public static final String AASX_PATH = "AasEnvConfig/aas_environment.json";
     public static final String DATA_BRIDGE_FOLDER = "DataBridgeConfig";
     public static Submodel creationSubmodel() {
         List<LangStringTextType> description = new ArrayList<LangStringTextType>();
@@ -154,7 +154,7 @@ public class SubmodelFactory {
     }
     private static Operation createInvokableOperation() {
         return new InvokableOperation.Builder()
-                .idShort("translateOperation")
+                .idShort("creationOperation")
                 .invokable(SubmodelFactory::creation)
                 .build();
     }

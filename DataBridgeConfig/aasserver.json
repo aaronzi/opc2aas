@@ -1,36 +1,36 @@
 [ {
   "uniqueId" : "b7a9791641446e4fd3e0d2de3f336a94145ce9fd0d3736a662d52b770600f2ec",
-  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzM4NThkZTg4LTEyZTMtNDQ3Yy04Y2EzLTVlZGU2NzNlYTBhMw==",
+  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzc4MjllODI1LTNjMjAtNDEyOC04MTA4LWQ5OGYyMmNkY2U0YQ==",
   "idShortPath" : "MyFolder.MyObject.Var1",
   "api" : "DotAAS-V3"
 }, {
   "uniqueId" : "273471c7c3158d732cfb9fdfe21bde212ba3e3e44d788b31114ac338c12fb3ef",
-  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzM4NThkZTg4LTEyZTMtNDQ3Yy04Y2EzLTVlZGU2NzNlYTBhMw==",
+  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzc4MjllODI1LTNjMjAtNDEyOC04MTA4LWQ5OGYyMmNkY2U0YQ==",
   "idShortPath" : "MyFolder.MyObject.Var2",
   "api" : "DotAAS-V3"
 }, {
   "uniqueId" : "a8355019b5b3ede573b19a2835c820c0352104384ba74f4023f597a29f5e6285",
-  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzM4NThkZTg4LTEyZTMtNDQ3Yy04Y2EzLTVlZGU2NzNlYTBhMw==",
+  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzc4MjllODI1LTNjMjAtNDEyOC04MTA4LWQ5OGYyMmNkY2U0YQ==",
   "idShortPath" : "MyFolder.MyObject.Var3",
   "api" : "DotAAS-V3"
 }, {
   "uniqueId" : "a498996dfe900c2c2ee3c7b62882bdd5069c7e33628cb8f7231ab7bedfdc5e25",
-  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzM4NThkZTg4LTEyZTMtNDQ3Yy04Y2EzLTVlZGU2NzNlYTBhMw==",
+  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzc4MjllODI1LTNjMjAtNDEyOC04MTA4LWQ5OGYyMmNkY2U0YQ==",
   "idShortPath" : "MyFolder.MyObject.Var4",
   "api" : "DotAAS-V3"
 }, {
   "uniqueId" : "373cc57144fc3f268ad8bad105dde032882be549e2df53ed38ca51ee632ddcb6",
-  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzM4NThkZTg4LTEyZTMtNDQ3Yy04Y2EzLTVlZGU2NzNlYTBhMw==",
+  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzc4MjllODI1LTNjMjAtNDEyOC04MTA4LWQ5OGYyMmNkY2U0YQ==",
   "idShortPath" : "TemperatureObject.Temperature",
   "api" : "DotAAS-V3"
 }, {
   "uniqueId" : "9328625ca540f28dd1785eca587254ccd0d8deb34f62d5167fff043dc67fbc2e",
-  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzM4NThkZTg4LTEyZTMtNDQ3Yy04Y2EzLTVlZGU2NzNlYTBhMw==",
+  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzc4MjllODI1LTNjMjAtNDEyOC04MTA4LWQ5OGYyMmNkY2U0YQ==",
   "idShortPath" : "DynamicObject.DynamicFloat",
   "api" : "DotAAS-V3"
 }, {
   "uniqueId" : "5405a43cb25622d4670ca27038da98de3c0b7972f51195a400617703eaac0a7b",
-  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzM4NThkZTg4LTEyZTMtNDQ3Yy04Y2EzLTVlZGU2NzNlYTBhMw==",
+  "submodelEndpoint" : "http://host.docker.internal:9081/submodels/aHR0cDovL29wYzJhYXMuY29tL3R5cGUvMS8xLzc4MjllODI1LTNjMjAtNDEyOC04MTA4LWQ5OGYyMmNkY2U0YQ==",
   "idShortPath" : "EnumObject.MachineState",
   "api" : "DotAAS-V3"
 } ]

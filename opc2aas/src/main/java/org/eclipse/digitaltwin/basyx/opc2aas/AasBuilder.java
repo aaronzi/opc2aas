@@ -1,11 +1,8 @@
 package org.eclipse.digitaltwin.basyx.opc2aas;
 
+import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 import org.eclipse.digitaltwin.aas4j.v3.model.AssetAdministrationShell;
 import org.eclipse.digitaltwin.aas4j.v3.model.AssetKind;
@@ -43,6 +40,7 @@ import org.eclipse.milo.opcua.stack.core.types.structured.EUInformation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import submodel.SubmodelFactory;
 
 public class AasBuilder {
 
@@ -54,6 +52,8 @@ public class AasBuilder {
     public static final String SUBMODEL_OPC_UA_TREE_ID = "http://opc2aas.com/type/1/1/" + UUID.randomUUID();
 
     private static final List<ConceptDescription> conceptDescriptions = new ArrayList<>();
+
+
 
     /**
      * Creates an AAS based on the OPC UA server subtree.
@@ -499,9 +499,15 @@ public class AasBuilder {
      * @param submodelRepositoryUrl The URL of the Submodel Repository.
      * @return The created environment.
      */
-    public static Environment createEnvironment(String aasIdShort, String serverApplicationUri, NodeInfo subTree, String endpointUrl, String username, String password, String submodelRepositoryUrl) {
+    public static Environment createEnvironment(String aasIdShort, String serverApplicationUri, NodeInfo subTree, String endpointUrl, String username, String password, String submodelRepositoryUrl) throws IOException {
+        Submodel creationSubmodel = SubmodelFactory.creationSubmodel();
+        Submodel outputSubmodel = SubmodelFactory.outputSubmodel();
+        List<Submodel> submodels = new ArrayList<>();
+        submodels.add(creationSubmodel);
+        submodels.add(outputSubmodel);
         return new DefaultEnvironment.Builder()
                 .assetAdministrationShells(createAAS(aasIdShort, serverApplicationUri))
+                .submodels(submodels)
                 .submodels(createSubmodelOpcUaTree(subTree, endpointUrl, username, password, submodelRepositoryUrl))
                 .conceptDescriptions(conceptDescriptions)
                 .build();

@@ -17,11 +17,11 @@
   "password" : "test",
   "requestPublishInterval" : 1000
 }, {
-  "uniqueId" : "588998ca837bdc956274b58de072395d7e36afa2098db8576c8ec050106943ba",
+  "uniqueId" : "1f7796c0fa59eb75e8c8e11a8ca518af5bb91d666c777e3ff9eefca0b8b77017",
   "serverUrl" : "host.docker.internal",
   "serverPort" : 4840,
   "pathToService" : "",
-  "nodeInformation" : "ns=2;g=daba2325-3b01-4db3-a4c2-0083870e3b60",
+  "nodeInformation" : "ns=2;g=d0134288-fc10-428f-b340-cfa285b3bf5b",
   "username" : "test",
   "password" : "test",
   "requestPublishInterval" : 1000
