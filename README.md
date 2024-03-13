@@ -43,7 +43,7 @@ In its current state, the opc2aas service is a java application that should be u
     - [ ] "RoutesFile" including the DataBridge configuration file for the routes between the OPC UA Consumer and the AAS Environment datasink.
 - [ ] Add a Dockerfile to build a docker image of the opc2aas service
 - [ ] Add a docker-compose file to start a demo environment with the opc2aas service, the OPC UA Testserver, the BaSyx AAS Environment, the BaSyx Registries and the DataBridge
-  - [ ] Note: Please change opc2aas volume path in docker-compose.yaml and give the absolute path of AasEnvConfig and DataBridgeConfig folders. Then give the following command:
+  - [ ] `Note:` Please change opc2aas volume path in docker-compose.yaml and give the absolute path of AasEnvConfig and DataBridgeConfig folders. Then give the following command:
 ```bash
 docker-compose up -d
 ```
