@@ -26,8 +26,8 @@ import org.eclipse.digitaltwin.basyx.opc2aas.OpcToAas;
 
 public class SubmodelFactory {
 
-    public static final String AASX_PATH = "AasEnvConfig/aas_environment.json";
-    public static final String DATA_BRIDGE_FOLDER = "DataBridgeConfig";
+    public static final String AASX_PATH = "aas_environment.aasx";
+
     public static Submodel creationSubmodel() {
         List<LangStringTextType> description = new ArrayList<LangStringTextType>();
         description.add(new DefaultLangStringTextType.Builder().language("de-DE")
@@ -68,12 +68,12 @@ public class SubmodelFactory {
 
     public static Submodel outputSubmodel() throws IOException {
         String aas = readFileAsString(AASX_PATH);
-        String consumerFile = readFileAsString("DataBridgeConfig/opcuaconsumer.json");
-        String extractvalue = readFileAsString("DataBridgeConfig/jsonataExtractValue.json");
-        String jsonatatransformer = readFileAsString("DataBridgeConfig/jsonatatransformer.json");
-        String jacksontransformer = readFileAsString("DataBridgeConfig/jsonjacksontransformer.json");
-        String aasserver = readFileAsString("DataBridgeConfig/aasserver.json");
-        String route = readFileAsString("DataBridgeConfig/routes.json");
+        String consumerFile = readFileAsString("opcuaconsumer.json");
+        String extractvalue = readFileAsString("jsonataExtractValue.json");
+        String jsonatatransformer = readFileAsString("jsonatatransformer.json");
+        String jacksontransformer = readFileAsString("jsonjacksontransformer.json");
+        String aasserver = readFileAsString("aasserver.json");
+        String route = readFileAsString("routes.json");
 
 
         List<LangStringTextType> description = new ArrayList<LangStringTextType>();

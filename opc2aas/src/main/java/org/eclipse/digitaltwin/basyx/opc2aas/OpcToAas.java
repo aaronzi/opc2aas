@@ -45,8 +45,8 @@ public class OpcToAas {
             Environment generatedAAS = createAasEnvironment(client, subTree);
 
             exportAasAsFile(generatedAAS);
-            Environment generatedNewAAS = createNewAasEnvironment(client,subTree);
-            exportAasAsJsonFile(generatedNewAAS);
+            //Environment generatedNewAAS = createNewAasEnvironment(client,subTree);
+            //exportAasAsJsonFile(generatedNewAAS);
             logger.info("AAS saved to aas_environment.aasx");
             SubmodelFactory.outputSubmodel();
 
@@ -153,13 +153,13 @@ public class OpcToAas {
      * @throws IOException If the file cannot be written.
      */
     private static void writeByteArrayToFile(byte[] content) throws IOException {
-        File envFolder = new File("AasEnvConfig");
-        if (!envFolder.exists() && !envFolder.mkdir()) {
-            logger.error("Failed to create directory: {}", envFolder.getAbsolutePath());
-            return;
-        }
+//        File envFolder = new File("AasEnvConfig");
+//        if (!envFolder.exists() && !envFolder.mkdir()) {
+//            logger.error("Failed to create directory: {}", envFolder.getAbsolutePath());
+//            return;
+//        }
 
-        File file = new File(envFolder, "aas_environment.aasx");
+        File file = new File("aas_environment.aasx");
 
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(content);
