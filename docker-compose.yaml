@@ -1,26 +1,96 @@
-version: '3.8'
+version: '3'
 services:
+  # OPC UA Test Server
+  opcua:
+    image: aaronzi/demo-opc-server:v1.0.0
+    container_name: opcserver
+    ports:
+      - "4840:4840"  # OPC UA server port
+      - "8080:8080"  # Health check port
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: always
+  
+  # OPC2AAS Service
   opc2aas:
     build:
       context: .
       dockerfile: Dockerfile
-    image: opc2aas:latest
+    container_name: opc2aas
     ports:
-      - "8081:8081"
+      - "9085:8081"
+    depends_on:
+      opcua:
+        condition: service_healthy
+    restart: always
 
-  opc-ua-testserver:
-    image: mcr.microsoft.com/iot/opc-ua-test-server:latest
-    ports:
-      - "4841:4840"
-  databridge:
-    image: eclipsebasyx/databridge:1.0.0-SNAPSHOT
-    ports:
-      - "8086:8085"
-  registry:
-    image: eclipsebasyx/aas-registry:1.5.1
-    ports:
-      - "8082:4000"
+  # AAS Environment
   aas-environment:
-    image: eclipsebasyx/aas-server:1.5.1
+    image: eclipsebasyx/aas-environment:2.0.0-milestone-02
+    container_name: aas-environment
+    volumes:
+      - ./basyx/aas-env.properties:/application/application.properties
+      - ./aas:/application/aas
     ports:
-      - "8085:4001"
+      - 9081:8081
+    restart: always
+    depends_on:
+      shell-registry:
+        condition: service_healthy
+      submodel-registry:
+        condition: service_healthy
+
+  # AAS Registry
+  shell-registry:
+    image: eclipsebasyx/aas-registry-log-mem:2.0.0-milestone-02
+    container_name: shell-registry
+    ports:
+      - 9082:8080
+    volumes:
+      - ./basyx/aas-registry.yml:/workspace/config/application.yml
+    restart: always
+
+  # Submodel Registry
+  submodel-registry:
+    image: eclipsebasyx/submodel-registry-log-mem:2.0.0-milestone-02
+    container_name: submodel-registry
+    ports:
+      - 9083:8080
+    volumes:
+      - ./basyx/sm-registry.yml:/workspace/config/application.yml
+    restart: always
+
+  # AAS Discovery
+  shell-discovery:
+    image: eclipsebasyx/aas-discovery:2.0.0-milestone-02
+    container_name: shell-discovery
+    ports:
+      - 9084:8081
+    volumes:
+      - ./basyx/aas-discovery.properties:/application/application.properties
+    restart: always
+
+  # AAS Web UI
+  aas-web-ui:
+    image: aaronzi/basyx-aas-ui:SNAPSHOT_10
+    container_name: aas-web-ui
+    ports:
+      - "9080:3000"
+    environment:
+      AAS_DISCOVERY_PATH: "http://localhost:9084/lookup/shells"
+      AAS_REGISTRY_PATH: "http://localhost:9082/shell-descriptors"
+      SUBMODEL_REGISTRY_PATH: "http://localhost:9083/submodel-descriptors"
+      AAS_REPO_PATH: "http://localhost:9081/shells"
+      SUBMODEL_REPO_PATH: "http://localhost:9081/submodels"
+      CD_REPO_PATH: "http://localhost:9081/concept-descriptions"
+      PRIMARY_COLOR: "#76b900"
+      LOGO_PATH: "/Logo/HTW.svg"
+    volumes:
+      - ./logo:/usr/src/app/dist/Logo
+    restart: always
+    depends_on:
+      aas-environment:
+        condition: service_healthy

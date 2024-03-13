@@ -1,5 +1,12 @@
+# First stage: Build the project
+FROM maven:3.8.1-openjdk-17 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
+# Second stage: Run the application
 FROM openjdk:17
 WORKDIR /app
-COPY opc2aas/target/basyx.opc2aas-3.1.4.jar .
+COPY --from=build /app/opc2aas/target/basyx.opc2aas-3.1.4.jar .
 EXPOSE 8081
 CMD ["java", "-jar", "basyx.opc2aas-3.1.4.jar"]
