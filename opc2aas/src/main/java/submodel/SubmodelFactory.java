@@ -46,16 +46,8 @@ public class SubmodelFactory {
         displayName.add(new DefaultLangStringNameType.Builder().language("de-DE")
             .text("CreationSubmodel")
             .build());
-        List<Key> refKeys = new ArrayList<Key>();
-        refKeys.add(new DefaultKey.Builder().value("123")
-            .build());
-
-        SubmodelElement sme1 = new DefaultProperty.Builder()
-            .value("123")
-            .idShort("test")
-            .build();
         Operation creation = createAASFromOPCNodeStructure();
-        List<SubmodelElement> smeList = Arrays.asList(sme1, creation);
+        List<SubmodelElement> smeList = Arrays.asList(creation);
 
         Submodel submodel = new DefaultSubmodel.Builder().category("TestCategory")
             .description(description)
@@ -63,8 +55,6 @@ public class SubmodelFactory {
             .id("CreationSubmodel")
             .idShort("CreationSubmodel")
             .kind(ModellingKind.INSTANCE)
-            .semanticId(new DefaultReference.Builder().keys(refKeys)
-                    .build())
             .submodelElements(smeList)
             .build();
 
@@ -101,10 +91,6 @@ public class SubmodelFactory {
         displayName.add(new DefaultLangStringNameType.Builder().language("de-DE")
             .text("OutputSubmodel")
             .build());
-        List<Key> refKeys = new ArrayList<Key>();
-        refKeys.add(new DefaultKey.Builder().value("123")
-            .build());
-
         SubmodelElement generatedAAS = new DefaultFile.Builder()
             .value(aas)
             .idShort("aas")
@@ -143,8 +129,6 @@ public class SubmodelFactory {
             .id("OutputSubmodel")
             .idShort("OutputSubmodel")
             .kind(ModellingKind.INSTANCE)
-            .semanticId(new DefaultReference.Builder().keys(refKeys)
-                    .build())
             .submodelElements(smeList)
             .build();
 
