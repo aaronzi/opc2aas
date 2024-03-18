@@ -4,6 +4,7 @@ WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 RUN ls /app/opc2aas/target/
+RUN ls /app/opc2aas/src/main/resources
 
 
 

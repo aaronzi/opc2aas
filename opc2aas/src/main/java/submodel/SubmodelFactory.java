@@ -22,9 +22,20 @@ import org.eclipse.digitaltwin.aas4j.v3.model.impl.*;
 import org.eclipse.digitaltwin.basyx.InvokableOperation;
 import org.eclipse.digitaltwin.basyx.opc2aas.OpcToAas;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 public class SubmodelFactory {
 
-    public static final String AASX_PATH = "aas_environment.aasx";
+    public static final String AASX_PATH = "AasEnvConfig/aas_environment.aasx";
 
     public static Submodel creationSubmodel() {
         List<LangStringTextType> description = new ArrayList<LangStringTextType>();
@@ -63,15 +74,23 @@ public class SubmodelFactory {
         byte[] bytes = Files.readAllBytes(Paths.get(filePath));
         return new String(bytes);
     }
+    private static String readResourceAsString(String resourcePath) throws IOException {
+        try (InputStream inputStream = SubmodelFactory.class.getClassLoader().getResourceAsStream(resourcePath)) {
+            if (inputStream == null) {
+                throw new FileNotFoundException("Resource not found: " + resourcePath);
+            }
+            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
 
     public static Submodel outputSubmodel() throws IOException {
-        String aas = readFileAsString(AASX_PATH);
-        String consumerFile = readFileAsString("opcuaconsumer.json");
-        String extractvalue = readFileAsString("jsonataExtractValue.json");
-        String jsonatatransformer = readFileAsString("jsonatatransformer.json");
-        String jacksontransformer = readFileAsString("jsonjacksontransformer.json");
-        String aasserver = readFileAsString("aasserver.json");
-        String route = readFileAsString("routes.json");
+        String aas = readResourceAsString(AASX_PATH);
+        String consumerFile = readResourceAsString("DataBridgeConfig/opcuaconsumer.json");
+        String extractvalue = readResourceAsString("DataBridgeConfig/jsonataExtractValue.json");
+        String jsonatatransformer = readResourceAsString("DataBridgeConfig/jsonatatransformer.json");
+        String jacksontransformer = readResourceAsString("DataBridgeConfig/jsonjacksontransformer.json");
+        String aasserver = readResourceAsString("DataBridgeConfig/aasserver.json");
+        String route = readResourceAsString("DataBridgeConfig/routes.json");
 
 
         List<LangStringTextType> description = new ArrayList<LangStringTextType>();
