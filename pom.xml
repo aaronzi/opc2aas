@@ -6,9 +6,8 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <!--        <version>3.2.3</version>-->
         <version>3.1.4</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
     <groupId>org.eclipse.digitaltwin.basyx</groupId>
     <artifactId>basyx.parent</artifactId>
@@ -43,36 +42,9 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-<!--    <build>-->
-<!--        <plugins>-->
-<!--            &lt;!&ndash;  Spring Boot Maven Plugin for easy packaging and running  &ndash;&gt;-->
-<!--            <plugin>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
-<!--    </build>-->
+
     <build>
         <plugins>
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-compiler-plugin</artifactId>-->
-<!--                <version>3.12.1</version>-->
-<!--                <configuration>-->
-<!--                    <source>17</source>-->
-<!--                    <target>17</target>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-
-            <!-- Explicitly define Maven Compiler Plugin -->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-compiler-plugin</artifactId>-->
-<!--                <version>3.9.5</version> &lt;!&ndash;  &ndash;&gt;-->
-<!--                <configuration>-->
-<!--                    <release>21</release> &lt;!&ndash;  &ndash;&gt;-->
-<!--                </configuration>-->
-<!--            </plugin>-->
             <!-- Spring Boot Maven Plugin for easy packaging and running -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import org.eclipse.digitaltwin.aas4j.v3.model.DataTypeDefXsd;
-import org.eclipse.digitaltwin.aas4j.v3.model.Key;
 import org.eclipse.digitaltwin.aas4j.v3.model.LangStringNameType;
 import org.eclipse.digitaltwin.aas4j.v3.model.LangStringTextType;
 import org.eclipse.digitaltwin.aas4j.v3.model.ModellingKind;
@@ -21,21 +20,11 @@ import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.*;
 import org.eclipse.digitaltwin.basyx.InvokableOperation;
 import org.eclipse.digitaltwin.basyx.opc2aas.OpcToAas;
-
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.stream.Collectors;
-
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-public class SubmodelFactory {
 
-    public static final String AASX_PATH = "AasEnvConfig/aas_environment.aasx";
+public class SubmodelFactory {
 
     public static Submodel creationSubmodel() {
         List<LangStringTextType> description = new ArrayList<LangStringTextType>();
@@ -74,15 +63,37 @@ public class SubmodelFactory {
     }
 
     public static Submodel outputSubmodel() throws IOException {
-        String aas = readResourceAsString(AASX_PATH);
-        String consumerFile = readResourceAsString("DataBridgeConfig/opcuaconsumer.json");
-        String extractvalue = readResourceAsString("DataBridgeConfig/jsonataExtractValue.json");
-        String jsonatatransformer = readResourceAsString("DataBridgeConfig/jsonatatransformer.json");
-        String jacksontransformer = readResourceAsString("DataBridgeConfig/jsonjacksontransformer.json");
-        String aasserver = readResourceAsString("DataBridgeConfig/aasserver.json");
-        String route = readResourceAsString("DataBridgeConfig/routes.json");
+        String aas = "aas";
+        String consumerFile = "consumerFile";
+        String extractvalue = "extractvalue";
+        String jsonatatransformer = "jsonatatransformer";
+        String jacksontransformer = "jacksontransformer";
+        String aasserver = "aasserver";
+        String route = "route";
 
 
+// Check if the files exist before reading them
+        /*if (Objects.nonNull(readResourceAsString("AasEnvConfig/aas_environment.aasx"))) {
+            aas = readResourceAsString("AasEnvConfig/aas_environment.aasx");
+        }
+        if (Objects.nonNull(readResourceAsString("DataBridgeConfig/opcuaconsumer.json"))) {
+            consumerFile = readResourceAsString("DataBridgeConfig/opcuaconsumer.json");
+        }
+        if (Objects.nonNull(readResourceAsString("DataBridgeConfig/jsonataExtractValue.json"))) {
+            extractvalue = readResourceAsString("DataBridgeConfig/jsonataExtractValue.json");
+        }
+        if (Objects.nonNull(readResourceAsString("DataBridgeConfig/jsonatatransformer.json"))) {
+            jsonatatransformer = readResourceAsString("DataBridgeConfig/jsonatatransformer.json");
+        }
+        if (Objects.nonNull(readResourceAsString("DataBridgeConfig/jsonjacksontransformer.json"))) {
+            jacksontransformer = readResourceAsString("DataBridgeConfig/jsonjacksontransformer.json");
+        }
+        if (Objects.nonNull(readResourceAsString("DataBridgeConfig/aasserver.json"))) {
+            aasserver = readResourceAsString("DataBridgeConfig/aasserver.json");
+        }
+        if (Objects.nonNull(readResourceAsString("DataBridgeConfig/routes.json"))) {
+            route = readResourceAsString("DataBridgeConfig/routes.json");
+        }*/
         List<LangStringTextType> description = new ArrayList<LangStringTextType>();
         description.add(new DefaultLangStringTextType.Builder().language("de-DE")
             .text("OutputSubmodel")
@@ -120,7 +131,7 @@ public class SubmodelFactory {
             .value(route)
             .idShort("route")
             .build();
-        //Operation creation = createAASFromOPCNodeStructure();
+
         List<SubmodelElement> smeList = Arrays.asList(generatedAAS, OPCUAConsumerFile, ExtractValueFile, JsonataTransformerFile, JsonJacksonTransformerFile, AASServerFile, RoutesFile);
 
         Submodel submodel = new DefaultSubmodel.Builder().category("TestCategory")
@@ -171,15 +182,8 @@ public class SubmodelFactory {
         String opcPassword = ((Property) inputs[4].getValue()).getValue();
         String submodelRepoUrl = ((Property) inputs[5].getValue()).getValue();
 
-        // in.setIdShort("result");
-        // results[i] = createOperationVariable(in);
-
         OpcToAas.processOperation(aasIdShort, opcNodeId, opcServerUrl, opcUsername, opcPassword, submodelRepoUrl);
 
-
-        //Integer squared = val * val;
-        //in.setValue(squared.toString());
-        //in.setIdShort("result");
         return new OperationVariable[0];
     }
 }
