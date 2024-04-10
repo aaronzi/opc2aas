@@ -120,7 +120,13 @@
             <version>2.15.0</version>
         </dependency>
 
-             <!-- Submodel Repository -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
+
+
+        <!-- Submodel Repository -->
         <dependency>
             <groupId>org.eclipse.digitaltwin.basyx</groupId>
             <artifactId>basyx.submodelrepository.component</artifactId>

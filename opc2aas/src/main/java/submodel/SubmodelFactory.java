@@ -111,8 +111,9 @@ public class SubmodelFactory {
             .idShort("consumerFile")
             .build();
         SubmodelElement ExtractValueFile = new DefaultFile.Builder()
-            .value(extractvalue)
+            .value("https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/2048px-LinkedIn_icon.svg.png")
             .idShort("extractvalue")
+            .contentType("image/png")
             .build();
         SubmodelElement JsonataTransformerFile = new DefaultFile.Builder()
             .value(jsonatatransformer)

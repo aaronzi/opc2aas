@@ -1,7 +1,13 @@
 package org.eclipse.digitaltwin.basyx.opc2aas;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
+import okhttp3.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -26,6 +32,13 @@ public class OpcToAas {
     private static String opcPassword;
     private static String submodelRepositoryUrl;
 
+    private static final String BASE_URL = "http://localhost:9085";
+    private static final String SUBMODEL_PATH = "/submodels/T3V0cHV0U3VibW9kZWw/submodel-elements/consumerFile/$value";
+    private static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json");
+
+    private static final String requestBody = "{\"contentType\": \"image/jpg\", \"value\": \"https://images.creativefabrica.com/products/previews/2023/12/19/x2ik76fgx/2afYycRGXuaW1qqa4C3TUclGGy1-mobile.jpg\"}";
+
+
 
     /**
      * The main method of the application.
@@ -48,12 +61,38 @@ public class OpcToAas {
             //Environment generatedNewAAS = createNewAasEnvironment(client,subTree);
             //exportAasAsJsonFile(generatedNewAAS);
             logger.info("AAS saved to aas_environment.aasx");
-            SubmodelFactory.outputSubmodel();
+            updateOutputSubmodel();
+            //SubmodelFactory.outputSubmodel();
+            logger.info("Output Submodel Updated");
 
         } catch (Exception e) {
             logger.error("An error occurred during the runtime of OPC2AAS: ", e);
         }
     }
+
+    private static void updateOutputSubmodel() throws IOException {
+
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, "{\r\n   \"contentType\": \"image/jpg\",\r\n   \"value\": \"https://images.creativefabrica.com/products/previews/2023/12/19/x2ik76fgx/2afYycRGXuaW1qqa4C3TUclGGy1-mobile.jpg\"\r\n}\r\n");
+        Request request = new Request.Builder()
+                .url("http://localhost:8081/submodels/T3V0cHV0U3VibW9kZWw/submodel-elements/consumerFile/$value?level=core")
+                .method("PATCH", body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+        Response response = client.newCall(request).execute();
+    }
+
+    private static String readResourceAsString(String resourcePath) throws IOException {
+        try (InputStream inputStream = SubmodelFactory.class.getClassLoader().getResourceAsStream(resourcePath)) {
+            if (inputStream == null) {
+                throw new FileNotFoundException("Resource not found: " + resourcePath);
+            }
+            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
+
     public static void processOperation(String aasIdShort, String opcNodeId, String opcServerUrl, String opcUsername, String opcPassword, String submodelRepositoryUrl) {
         // The input parameters
         OpcToAas.aasIdShort = aasIdShort;
