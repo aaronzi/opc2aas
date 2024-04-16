@@ -105,19 +105,22 @@ public class SubmodelFactory {
         SubmodelElement generatedAAS = new DefaultFile.Builder()
             .value(aas)
             .idShort("aas")
+            .contentType("application/json")
             .build();
         SubmodelElement OPCUAConsumerFile = new DefaultFile.Builder()
             .value(consumerFile)
             .idShort("consumerFile")
+            .contentType("application/json")
             .build();
         SubmodelElement ExtractValueFile = new DefaultFile.Builder()
             .value("https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/2048px-LinkedIn_icon.svg.png")
             .idShort("extractvalue")
-            .contentType("image/png")
+            .contentType("application/json")
             .build();
         SubmodelElement JsonataTransformerFile = new DefaultFile.Builder()
             .value(jsonatatransformer)
             .idShort("jsonatatransformer")
+            .contentType("application/json")
             .build();
 
         SubmodelElement JsonJacksonTransformerFile = new DefaultFile.Builder()

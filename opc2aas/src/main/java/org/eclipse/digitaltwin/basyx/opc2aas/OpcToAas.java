@@ -8,7 +8,10 @@ import java.net.URL;
 import okhttp3.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.io.File;
+import java.nio.file.Files;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +40,7 @@ public class OpcToAas {
     private static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json");
 
     private static final String requestBody = "{\"contentType\": \"image/jpg\", \"value\": \"https://images.creativefabrica.com/products/previews/2023/12/19/x2ik76fgx/2afYycRGXuaW1qqa4C3TUclGGy1-mobile.jpg\"}";
-
+    //private static final OkHttpClient client = new OkHttpClient();
 
 
     /**
@@ -61,36 +64,50 @@ public class OpcToAas {
             //Environment generatedNewAAS = createNewAasEnvironment(client,subTree);
             //exportAasAsJsonFile(generatedNewAAS);
             logger.info("AAS saved to aas_environment.aasx");
-            updateOutputSubmodel();
-            //SubmodelFactory.outputSubmodel();
+            String[] filePaths = {"/opcuaconsumer.json", "/jsonataExtractValue.json", "/jsonatatransformer.json", "/jsonjacksontransformer.json", "/aasserver.json", "/routes.json", "/aas_environment.aasx"};
+            String[] idShort = {"consumerFile", "extractvalue", "jsonatatransformer", "jacksontransformer", "aasserver", "route", "aas"};
+
+            for (int i = 0; i < filePaths.length; i++) {
+                updateOutputSubmodel(filePaths[i], idShort[i]);
+            }
+
             logger.info("Output Submodel Updated");
 
         } catch (Exception e) {
             logger.error("An error occurred during the runtime of OPC2AAS: ", e);
         }
     }
+/*
+*
+* Updates the submodel element values of OutputSubmodel
+* each time there are new inputs of CreationSubmodel and
+* new files are created
+*
+* */
+    private static void updateOutputSubmodel(String filePath, String idShort) throws IOException {
 
-    private static void updateOutputSubmodel() throws IOException {
+       OkHttpClient client = new OkHttpClient().newBuilder().build();
 
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\r\n   \"contentType\": \"image/jpg\",\r\n   \"value\": \"https://images.creativefabrica.com/products/previews/2023/12/19/x2ik76fgx/2afYycRGXuaW1qqa4C3TUclGGy1-mobile.jpg\"\r\n}\r\n");
+        //String jsonBody = "{\r\n   \"contentType\": \"application/json\",\r\n   \"value\": " + fileContent + "\r\n}\r\n";
+        String jsonBody = "{\r\n   \"contentType\": \"application/json\",\r\n   \"value\": " + "\"" + filePath + "\"" +"\r\n}\r\n";
+
+        //String jsonBody = "{\r\n   \"contentType\": \"application/json\",\r\n   \"value\": " + "\"" + fileContent.replace("\"", "\\\"").replace("\n", "\r\n") + "\"" +"\r\n}\r\n";
+        System.out.println(jsonBody);
+
+        RequestBody body = RequestBody.create(mediaType, jsonBody);
+
+        // Construct the URL with the idShort
+        String url = "http://localhost:8081/submodels/T3V0cHV0U3VibW9kZWw/submodel-elements/" + idShort + "/$value?level=core";
+        System.out.println(url);
+
         Request request = new Request.Builder()
-                .url("http://localhost:8081/submodels/T3V0cHV0U3VibW9kZWw/submodel-elements/consumerFile/$value?level=core")
+                .url(url)
                 .method("PATCH", body)
                 .addHeader("Content-Type", "application/json")
                 .build();
-        Response response = client.newCall(request).execute();
-    }
 
-    private static String readResourceAsString(String resourcePath) throws IOException {
-        try (InputStream inputStream = SubmodelFactory.class.getClassLoader().getResourceAsStream(resourcePath)) {
-            if (inputStream == null) {
-                throw new FileNotFoundException("Resource not found: " + resourcePath);
-            }
-            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-        }
+        Response response = client.newCall(request).execute();
     }
 
     public static void processOperation(String aasIdShort, String opcNodeId, String opcServerUrl, String opcUsername, String opcPassword, String submodelRepositoryUrl) {
