@@ -64,7 +64,7 @@ public class OpcToAas {
             //Environment generatedNewAAS = createNewAasEnvironment(client,subTree);
             //exportAasAsJsonFile(generatedNewAAS);
             logger.info("AAS saved to aas_environment.aasx");
-            String[] filePaths = {"/opcuaconsumer.json", "/jsonataExtractValue.json", "/jsonatatransformer.json", "/jsonjacksontransformer.json", "/aasserver.json", "/routes.json", "/aas_environment.aasx"};
+            String[] filePaths = {"opcuaconsumer.json", "jsonataExtractValue.json", "jsonatatransformer.json", "jsonjacksontransformer.json", "aasserver.json", "routes.json", "aas_environment.aasx"};
             String[] idShort = {"consumerFile", "extractvalue", "jsonatatransformer", "jacksontransformer", "aasserver", "route", "aas"};
 
             for (int i = 0; i < filePaths.length; i++) {
@@ -85,29 +85,30 @@ public class OpcToAas {
 *
 * */
     private static void updateOutputSubmodel(String filePath, String idShort) throws IOException {
+        File file = new File(filePath);
 
-       OkHttpClient client = new OkHttpClient().newBuilder().build();
+        // Create a RequestBody that can hold the file as a part of form-data
+        RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", file.getName(), fileBody)
+                .build();
 
-        MediaType mediaType = MediaType.parse("application/json");
-        //String jsonBody = "{\r\n   \"contentType\": \"application/json\",\r\n   \"value\": " + fileContent + "\r\n}\r\n";
-        String jsonBody = "{\r\n   \"contentType\": \"application/json\",\r\n   \"value\": " + "\"" + filePath + "\"" +"\r\n}\r\n";
-
-        //String jsonBody = "{\r\n   \"contentType\": \"application/json\",\r\n   \"value\": " + "\"" + fileContent.replace("\"", "\\\"").replace("\n", "\r\n") + "\"" +"\r\n}\r\n";
-        System.out.println(jsonBody);
-
-        RequestBody body = RequestBody.create(mediaType, jsonBody);
+        OkHttpClient client = new OkHttpClient();
 
         // Construct the URL with the idShort
-        String url = "http://localhost:8081/submodels/T3V0cHV0U3VibW9kZWw/submodel-elements/" + idShort + "/$value?level=core";
+        String url = "http://aas-environment:8081/submodels/T3V0cHV0U3VibW9kZWw/submodel-elements/" + idShort + "/attachment?fileName=" + file.getName();
         System.out.println(url);
 
         Request request = new Request.Builder()
                 .url(url)
-                .method("PATCH", body)
-                .addHeader("Content-Type", "application/json")
+                .put(requestBody) // Use PUT and set the multipart body
                 .build();
 
-        Response response = client.newCall(request).execute();
+        try (Response response = client.newCall(request).execute()) {
+            // Handle the response as needed
+            System.out.println("Response Code: " + response.code() + " - " + response.message());
+        }
     }
 
     public static void processOperation(String aasIdShort, String opcNodeId, String opcServerUrl, String opcUsername, String opcPassword, String submodelRepositoryUrl) {

@@ -61,5 +61,70 @@
       "idShort": "DemoOpcServer"
     }
   ],
+  "submodels": [
+    {
+      "modelType": "Submodel",
+      "kind": "Instance",
+      "id": "OutputSubmodel",
+      "category": "TestCategory",
+      "description": [
+        {
+          "language": "de-DE",
+          "text": "OutputSubmodel"
+        }
+      ],
+      "displayName": [
+        {
+          "language": "de-DE",
+          "text": "OutputSubmodel"
+        }
+      ],
+      "idShort": "OutputSubmodel",
+      "submodelElements": [
+        {
+          "modelType": "File",
+          "contentType": "application/json",
+          "value": "/aas_environment.aasx",
+          "idShort": "aas"
+        },
+        {
+          "modelType": "File",
+          "contentType": "application/json",
+          "value": "/opcuaconsumer.json",
+          "idShort": "consumerFile"
+        },
+        {
+          "modelType": "File",
+          "contentType": "application/json",
+          "value": "/jsonataExtractValue.json",
+          "idShort": "extractvalue"
+        },
+        {
+          "modelType": "File",
+          "contentType": "application/json",
+          "value": "/jsonatatransformer.json",
+          "idShort": "jsonatatransformer"
+        },
+        {
+          "modelType": "File",
+          "contentType": "application/json",
+          "value": "/jsonjacksontransformer.json",
+          "idShort": "jacksontransformer"
+        },
+        {
+          "modelType": "File",
+          "contentType": "application/json",
+          "value": "/aasserver.json",
+          "idShort": "aasserver"
+        },
+        {
+          "modelType": "File",
+          "contentType": "application/json",
+          "value": "/routes.json",
+          "idShort": "route"
+        }
+      ]
+    }
+  ],
   "conceptDescriptions": []
 }

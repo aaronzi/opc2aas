@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.eclipse.digitaltwin.basyx.submodelrepository.SubmodelRepository;
 
-
 import java.io.IOException;
 
 @SpringBootApplication(
@@ -21,7 +20,6 @@ public class SubmodelRepositoryComponentForOpc {
         SubmodelRepository repo = context.getBean(SubmodelRepository.class);
 
         repo.createSubmodel(SubmodelFactory.creationSubmodel());
-        repo.createSubmodel(SubmodelFactory.outputSubmodel());
 
     }
 }

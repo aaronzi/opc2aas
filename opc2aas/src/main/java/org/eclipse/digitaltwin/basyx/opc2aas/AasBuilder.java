@@ -534,10 +534,8 @@ public class AasBuilder {
     }
     public static Environment createNewEnvironment(String aasIdShort, String serverApplicationUri, NodeInfo subTree, String endpointUrl, String username, String password, String submodelRepositoryUrl) throws IOException {
         Submodel creationSubmodel = SubmodelFactory.creationSubmodel();
-        Submodel outputSubmodel = SubmodelFactory.outputSubmodel();
         List<Submodel> submodels = new ArrayList<>();
         submodels.add(creationSubmodel);
-        submodels.add(outputSubmodel);
         return new DefaultEnvironment.Builder()
                 .assetAdministrationShells(createNewAAS(aasIdShort, serverApplicationUri))
                 .submodels(submodels)
