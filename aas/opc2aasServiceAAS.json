@@ -84,43 +84,43 @@
         {
           "modelType": "File",
           "contentType": "application/json",
-          "value": "/aas_environment.aasx",
+          "value": "aas",
           "idShort": "aas"
         },
         {
           "modelType": "File",
           "contentType": "application/json",
-          "value": "/opcuaconsumer.json",
+          "value": "consumerFile",
           "idShort": "consumerFile"
         },
         {
           "modelType": "File",
           "contentType": "application/json",
-          "value": "/jsonataExtractValue.json",
+          "value": "extractvalue",
           "idShort": "extractvalue"
         },
         {
           "modelType": "File",
           "contentType": "application/json",
-          "value": "/jsonatatransformer.json",
+          "value": "jsonatatransformer",
           "idShort": "jsonatatransformer"
         },
         {
           "modelType": "File",
           "contentType": "application/json",
-          "value": "/jsonjacksontransformer.json",
+          "value": "jacksontransformer",
           "idShort": "jacksontransformer"
         },
         {
           "modelType": "File",
           "contentType": "application/json",
-          "value": "/aasserver.json",
+          "value": "aasserver",
           "idShort": "aasserver"
         },
         {
           "modelType": "File",
           "contentType": "application/json",
-          "value": "/routes.json",
+          "value": "route",
           "idShort": "route"
         }
       ]

@@ -1,12 +1,8 @@
 package submodel;
 
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import java.io.IOException;
-import java.nio.file.Files;
 
 import org.eclipse.digitaltwin.aas4j.v3.model.DataTypeDefXsd;
 import org.eclipse.digitaltwin.aas4j.v3.model.LangStringNameType;
@@ -20,9 +16,7 @@ import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.*;
 import org.eclipse.digitaltwin.basyx.InvokableOperation;
 import org.eclipse.digitaltwin.basyx.opc2aas.OpcToAas;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.io.FileNotFoundException;
+
 
 public class SubmodelFactory {
 
@@ -49,18 +43,6 @@ public class SubmodelFactory {
 
         return submodel;
     }
-    private static String readFileAsString(String filePath) throws IOException {
-        byte[] bytes = Files.readAllBytes(Paths.get(filePath));
-        return new String(bytes);
-    }
-    private static String readResourceAsString(String resourcePath) throws IOException {
-        try (InputStream inputStream = SubmodelFactory.class.getClassLoader().getResourceAsStream(resourcePath)) {
-            if (inputStream == null) {
-                throw new FileNotFoundException("Resource not found: " + resourcePath);
-            }
-            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-        }
-    }
 
     public static Operation createAASFromOPCNodeStructure() {
         return new InvokableOperation.Builder()
@@ -73,16 +55,6 @@ public class SubmodelFactory {
                 createStringOperationVariable("submodelRepoUrl")))
             .invokable(SubmodelFactory::creation)
             .build();
-    }
-    private static Operation createInvokableOperation() {
-        return new InvokableOperation.Builder()
-            .idShort("creationOperation")
-            .invokable(SubmodelFactory::creation)
-            .build();
-    }
-
-    private static OperationVariable createOperationVariable(Property val) {
-        return new DefaultOperationVariable.Builder().value(val).build();
     }
 
     private static DefaultOperationVariable createStringOperationVariable(String idShort) {

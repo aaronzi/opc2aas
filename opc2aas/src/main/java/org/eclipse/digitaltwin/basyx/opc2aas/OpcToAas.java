@@ -1,30 +1,18 @@
 package org.eclipse.digitaltwin.basyx.opc2aas;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import okhttp3.*;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.io.File;
-import java.nio.file.Files;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
-
 import org.eclipse.digitaltwin.aas4j.v3.model.Environment;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.SerializationException;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.aasx.AASXSerializer;
-import submodel.SubmodelFactory;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class OpcToAas {
     private static final Logger logger = LoggerFactory.getLogger(OpcToAas.class);
@@ -34,14 +22,6 @@ public class OpcToAas {
     private static String opcUsername;
     private static String opcPassword;
     private static String submodelRepositoryUrl;
-
-    private static final String BASE_URL = "http://localhost:9085";
-    private static final String SUBMODEL_PATH = "/submodels/T3V0cHV0U3VibW9kZWw/submodel-elements/consumerFile/$value";
-    private static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json");
-
-    private static final String requestBody = "{\"contentType\": \"image/jpg\", \"value\": \"https://images.creativefabrica.com/products/previews/2023/12/19/x2ik76fgx/2afYycRGXuaW1qqa4C3TUclGGy1-mobile.jpg\"}";
-    //private static final OkHttpClient client = new OkHttpClient();
-
 
     /**
      * The main method of the application.
@@ -59,10 +39,8 @@ public class OpcToAas {
 
             NodeInfo subTree = readOpcUaSubtree(client);
             Environment generatedAAS = createAasEnvironment(client, subTree);
-
             exportAasAsFile(generatedAAS);
-            //Environment generatedNewAAS = createNewAasEnvironment(client,subTree);
-            //exportAasAsJsonFile(generatedNewAAS);
+
             logger.info("AAS saved to aas_environment.aasx");
             String[] filePaths = {"opcuaconsumer.json", "jsonataExtractValue.json", "jsonatatransformer.json", "jsonjacksontransformer.json", "aasserver.json", "routes.json", "aas_environment.aasx"};
             String[] idShort = {"consumerFile", "extractvalue", "jsonatatransformer", "jacksontransformer", "aasserver", "route", "aas"};
@@ -123,8 +101,6 @@ public class OpcToAas {
 
     }
 
-
-
     /**
      * Initializes the DataBridge configuration files.
      *
@@ -182,13 +158,6 @@ public class OpcToAas {
         return environment;
     }
 
-    private static Environment createNewAasEnvironment(OpcUaClient client, NodeInfo subTree) throws Exception {
-        String serverApplicationUri = OpcUtils.getServerApplicationUri(client);
-        Environment environment = AasBuilder.createNewEnvironment(aasIdShort, serverApplicationUri, subTree, opcServerUrl, opcUsername, opcPassword, submodelRepositoryUrl);
-        logger.info("New AAS created");
-        return environment;
-    }
-
     /**
      * Exports the AAS as a file.
      *
@@ -210,11 +179,6 @@ public class OpcToAas {
      * @throws IOException If the file cannot be written.
      */
     private static void writeByteArrayToFile(byte[] content) throws IOException {
-//        File envFolder = new File("AasEnvConfig");
-//        if (!envFolder.exists() && !envFolder.mkdir()) {
-//            logger.error("Failed to create directory: {}", envFolder.getAbsolutePath());
-//            return;
-//        }
 
         File file = new File("aas_environment.aasx");
 
@@ -226,28 +190,4 @@ public class OpcToAas {
             throw e;
         }
     }
-
-    private static void exportAasAsJsonFile(Environment environment) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonContent = objectMapper.writeValueAsString(environment);
-        writeStringToFile(jsonContent);
-    }
-    private static void writeStringToFile(String content) throws IOException {
-        File envFolder = new File("AasEnvConfig");
-        if (!envFolder.exists() && !envFolder.mkdir()) {
-            logger.error("Failed to create directory: {}", envFolder.getAbsolutePath());
-            return;
-        }
-
-        File file = new File(envFolder, "aas_new_environment.json");
-
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-            fos.write(content.getBytes());
-            logger.debug("Written content to file: {}", file.getAbsolutePath());
-        } catch (IOException e) {
-            logger.error("Error writing to file: {}", file.getAbsolutePath(), e);
-            throw e;
-        }
-    }
-
 }

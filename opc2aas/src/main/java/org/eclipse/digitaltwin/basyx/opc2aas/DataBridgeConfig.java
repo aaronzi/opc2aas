@@ -100,11 +100,6 @@ public class DataBridgeConfig {
      * Creates the initial configuration files for the DataBridge.
      */
     public static void createConfigFiles() {
-        /*File configFolder = new File("DataBridgeConfig");
-
-        if (!configFolder.exists()) {
-            configFolder.mkdir();
-        }*/
 
         String[] fileNames = {
                 "aasserver.json",
@@ -160,12 +155,6 @@ public class DataBridgeConfig {
             ObjectMapper objectMapper = new ObjectMapper()
                     .setSerializationInclusion(JsonInclude.Include.NON_NULL); // Ignore null and empty fields globally;
 
-           /* File configFolder = new File("opc2aas/src/main/resources/DataBridgeConfig");
-
-            if (!configFolder.exists()) {
-                configFolder.mkdir();
-            }*/
-
             File file = new File("opcuaconsumer.json");
             // Read existing content
             List<OpcUaConsumerEntry> existingEntries = new ArrayList<>();
@@ -211,12 +200,6 @@ public class DataBridgeConfig {
     public static void writeRouteEntry(NodeInfo node, String submodelIdShort, String idShortPath, String endpointUrl) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-
-           /* File configFolder = new File("opc2aas/src/main/resources/DataBridgeConfig");
-
-            if (!configFolder.exists()) {
-                configFolder.mkdir();
-            }*/
 
             // Read existing content
             File file = new File("routes.json");
@@ -264,12 +247,6 @@ public class DataBridgeConfig {
     public static void writeAasServerEntry(NodeInfo node, String submodelIdShort, String submodelIdentifier, String idShortPath, String submodelRepositoryUrl, String endpointUrl) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-
-         /*   File configFolder = new File("opc2aas/src/main/resources/DataBridgeConfig");
-
-            if (!configFolder.exists()) {
-                configFolder.mkdir();
-            }*/
 
             // Read existing content
             File file = new File("aasserver.json");

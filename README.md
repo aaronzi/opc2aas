@@ -4,42 +4,48 @@ Asset Administration Shell Service that translates OPC UA Node Structures to Ass
 ## OPC UA Testserver
 
 To test the functionality of the opc2aas service, you can use the OPC UA Testserver. It is a docker container that provides a simple OPC UA server with a few nodes. The docker image is available at [aaronzi/demo-opc-server](https://hub.docker.com/r/aaronzi/demo-opc-server).
-To start the container, run the following command:
+
+### Prerequisites
+Make sure you have Docker and Docker Compose installed on your system.
+
+### Starting the OPC UA Testserver
+Run the following command to start the test server:
 
 ```bash
-docker run -d --name opcserver -p 4840:4840 -p 8080:8080 --health-cmd='curl -f http://localhost:8080/health || exit 1' --health-interval=10s --health-timeout=5s --health-retries=3 --restart always aaronzi/demo-opc-server:v1.0.0
+docker-compose up -d
 ```
 
 ## opc2aas Service
+### Environment variables
+In its current state, the opc2aas service takes the input of the following environment variables:
 
-In its current state, the opc2aas service is a java application that should be used with the following specified environment variables:
+| Variable                  | Description                                                                            | Input values                               |
+|---------------------------|----------------------------------------------------------------------------------------|--------------------------------------------|
+| `SUBMODEL_REPOSITORY_URL` | The URL of the BaSyx Submodel Repository where the AASs Submodels will be uploaded to. | http://host.docker.internal:9081/submodels |
+| `ENDPOINT_URL`            | The URL of the OPC UA server that should be used.                                      | opc.tcp://opcserver:4840                   |
+| `START_NODE_ID`           | The NodeId of the node from which the opc2aas service should start.                    | ns=2;i=1                                   |
+| `AAS_ID_SHORT`            | The idShort of the AAS that will be created.                                           | DemoOpcServer                              |
+| `USERNAME` (optional)     | The username that will be used to authenticate with the OPC UA server.                 | test                                       |
+| `PASSWORD` (optional)     | The password that will be used to authenticate with the OPC UA server.                 | test                                       |
 
-| Variable                  | Description                                                                            |
-|---------------------------|----------------------------------------------------------------------------------------|
-| `SUBMODEL_REPOSITORY_URL` | The URL of the BaSyx Submodel Repository where the AASs Submodels will be uploaded to. |
-| `ENDPOINT_URL`            | The URL of the OPC UA server that should be used.                                      |
-| `START_NODE_ID`           | The NodeId of the node from which the opc2aas service should start.                    |
-| `AAS_ID_SHORT`            | The idShort of the AAS that will be created.                                           |
-| `USERNAME` (optional)     | The username that will be used to authenticate with the OPC UA server.                 |
-| `PASSWORD` (optional)     | The password that will be used to authenticate with the OPC UA server.                 |
+### Configuring the Service
+To configure the opc2aas service, input appropriate values for environment variables listed above in the _CreationSubmodel_ of the AAS DemoOpcServer using the AAS Web UI. Navigate to the following link to do that:
 
-## ToDos:
+```
+http://localhost:9080
+```
 
-- [ ] Use BaSyx SubmodelRepository Component to represent the opc2aas service as an AAS itself (two Submodels that will be linked to an OPC2AAS AAS)
-- [ ] Implement the following two Submodels as interfaces to the opc2aas service:
-  - [ ] A Submodel called "CreationSubmodel" that includes an Operation called "CreateAASFromOPCNodeStructure". The Operation should have the following parameters:
-    - [ ] A String called "aasIdShort" that represents the idShort of the AAS that will be created.
-    - [ ] A String called "opcNodeId" that represents the NodeId of the node from which the opc2aas service should start.
-    - [ ] A String called "opcServerUrl" that represents the URL of the OPC UA server that should be used.
-    - [ ] A String called "opcUsername" that represents the username that will be used to authenticate with the OPC UA server.
-    - [ ] A String called "opcPassword" that represents the password that will be used to authenticate with the OPC UA server.
-  - [ ] A Submodel called "OutputSubmodel" that includes File-SubmodelElements for the generated AAS and DataBridge configuration. The following files should be included:
-    - [ ] "GeneratedAAS" including the generated AASX file.
-    - [ ] "OPCUAConsumerFile" including the DataBridge configuration file for the OPC UA Consumer.
-    - [ ] "ExtractValueFile" including the transformer configuration file to extract the OPC UA value from the Java Node Object.
-    - [ ] "JsonataTransformerFile" including the transformer configuration file.
-    - [ ] "JsonJacksonTransformerFile" including the transformer configuration file.
-    - [ ] "AASServerFile" including the DataBridge configuration file for the AAS Environment datasink.
-    - [ ] "RoutesFile" including the DataBridge configuration file for the routes between the OPC UA Consumer and the AAS Environment datasink.
-- [ ] Add a Dockerfile to build a docker image of the opc2aas service
-- [ ] Add a docker-compose file to start a demo environment with the opc2aas service, the OPC UA Testserver, the BaSyx AAS Environment, the BaSyx Registries and the DataBridge
+After providing the inputs and executing the configuration, the service will generate seven files in the _OutputSubmodel_ if the connection to the OPC UA Node is successful.
+
+### Generated Files
+The following files are generated that can also be downloaded:
+
+| File Name                | Description                                                                                                | 
+|--------------------------|------------------------------------------------------------------------------------------------------------|
+| ***aas***                | Generated AASX file.                                                                                       | 
+| ***consumerFile***       | DataBridge configuration file for the OPC UA Consumer.                                                     | 
+| ***extractvalue***       | Transformer configuration file to extract the OPC UA value from the Java Node Object.                      | 
+| ***jsonatatransformer*** | Transformer configuration file.                                                                            | 
+| ***jacksontransformer*** | Transformer configuration file.                                                                            | 
+| ***aasserver***          | DataBridge configuration file for the AAS Environment datasink.                                            |
+| ***route***              | DataBridge configuration file for the routes between the OPC UA Consumer and the AAS Environment datasink. |
