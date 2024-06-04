@@ -84,43 +84,43 @@
         {
           "modelType": "File",
           "contentType": "application/json",
-          "value": "aas",
+          "value": "",
           "idShort": "aas"
         },
         {
           "modelType": "File",
           "contentType": "application/json",
-          "value": "consumerFile",
+          "value": "",
           "idShort": "consumerFile"
         },
         {
           "modelType": "File",
           "contentType": "application/json",
-          "value": "extractvalue",
+          "value": "",
           "idShort": "extractvalue"
         },
         {
           "modelType": "File",
           "contentType": "application/json",
-          "value": "jsonatatransformer",
+          "value": "",
           "idShort": "jsonatatransformer"
         },
         {
           "modelType": "File",
           "contentType": "application/json",
-          "value": "jacksontransformer",
+          "value": "",
           "idShort": "jacksontransformer"
         },
         {
           "modelType": "File",
           "contentType": "application/json",
-          "value": "aasserver",
+          "value": "",
           "idShort": "aasserver"
         },
         {
           "modelType": "File",
           "contentType": "application/json",
-          "value": "route",
+          "value": "",
           "idShort": "route"
         }
       ]
