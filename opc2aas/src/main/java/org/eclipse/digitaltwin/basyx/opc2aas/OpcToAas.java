@@ -46,7 +46,7 @@ public class OpcToAas {
             String[] idShort = {"consumerFile", "extractvalue", "jsonatatransformer", "jacksontransformer", "aasserver", "route", "aas"};
 
             for (int i = 0; i < filePaths.length; i++) {
-                updateOutputSubmodel(filePaths[i], idShort[i]);
+                updateOutputSubmodel(filePaths[i], idShort[i], submodelRepositoryUrl);
             }
 
             logger.info("Output Submodel Updated");
@@ -62,11 +62,11 @@ public class OpcToAas {
 * new files are created
 *
 * */
-    private static void updateOutputSubmodel(String filePath, String idShort) throws IOException {
+    private static void updateOutputSubmodel(String filePath, String idShort, String submodelRepositoryUrl) throws IOException {
         File file = new File(filePath);
 
         // Create a RequestBody that can hold the file as a part of form-data
-        RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);
+        RequestBody fileBody = RequestBody.create(file, MediaType.parse("application/octet-stream"));
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("file", file.getName(), fileBody)
@@ -75,7 +75,7 @@ public class OpcToAas {
         OkHttpClient client = new OkHttpClient();
 
         // Construct the URL with the idShort
-        String url = "http://aas-environment:8081/submodels/T3V0cHV0U3VibW9kZWw/submodel-elements/" + idShort + "/attachment?fileName=" + file.getName();
+        String url = submodelRepositoryUrl + "/T3V0cHV0U3VibW9kZWw/submodel-elements/" + idShort + "/attachment?fileName=" + file.getName();
         System.out.println(url);
 
         Request request = new Request.Builder()
