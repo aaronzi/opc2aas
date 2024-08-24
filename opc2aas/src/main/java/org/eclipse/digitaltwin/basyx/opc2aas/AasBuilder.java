@@ -1,16 +1,13 @@
 package org.eclipse.digitaltwin.basyx.opc2aas;
 
+import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 import org.eclipse.digitaltwin.aas4j.v3.model.AssetAdministrationShell;
 import org.eclipse.digitaltwin.aas4j.v3.model.AssetKind;
 import org.eclipse.digitaltwin.aas4j.v3.model.ConceptDescription;
-import org.eclipse.digitaltwin.aas4j.v3.model.DataTypeDefXSD;
+import org.eclipse.digitaltwin.aas4j.v3.model.DataTypeDefXsd;
 import org.eclipse.digitaltwin.aas4j.v3.model.DataTypeIec61360;
 import org.eclipse.digitaltwin.aas4j.v3.model.Environment;
 import org.eclipse.digitaltwin.aas4j.v3.model.KeyTypes;
@@ -34,7 +31,7 @@ import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultMultiLanguageProperty;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultProperty;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultReference;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultResource;
-import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSpecificAssetID;
+import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSpecificAssetId;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodel;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodelElementCollection;
 
@@ -43,6 +40,7 @@ import org.eclipse.milo.opcua.stack.core.types.structured.EUInformation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import submodel.SubmodelFactory;
 
 public class AasBuilder {
 
@@ -54,6 +52,8 @@ public class AasBuilder {
     public static final String SUBMODEL_OPC_UA_TREE_ID = "http://opc2aas.com/type/1/1/" + UUID.randomUUID();
 
     private static final List<ConceptDescription> conceptDescriptions = new ArrayList<>();
+
+
 
     /**
      * Creates an AAS based on the OPC UA server subtree.
@@ -68,11 +68,11 @@ public class AasBuilder {
                 .id(createIdentifier("aas"))
                 .assetInformation(new DefaultAssetInformation.Builder()
                         .assetKind(AssetKind.INSTANCE)
-                        .globalAssetID(createGlobalId(11, "asset"))
-                        .specificAssetIds(new DefaultSpecificAssetID.Builder()
+                        .globalAssetId(createGlobalId(11, "asset"))
+                        .specificAssetIds(new DefaultSpecificAssetId.Builder()
                                 .name("OpcUaServerID")
                                 .value(serverApplicationUri)
-                                .externalSubjectID(new DefaultReference.Builder()
+                                .externalSubjectId(new DefaultReference.Builder()
                                         .keys(new DefaultKey.Builder()
                                                 .type(KeyTypes.GLOBAL_REFERENCE)
                                                 .value(createGlobalId(11, "Systems"))
@@ -94,6 +94,31 @@ public class AasBuilder {
                         .build())
                 .build();
     }
+    public static AssetAdministrationShell createNewAAS(String aasIdShort, String serverApplicationUri){
+        return new DefaultAssetAdministrationShell.Builder()
+                .idShort(aasIdShort)
+                .id(createIdentifier("aas"))
+                .assetInformation(new DefaultAssetInformation.Builder()
+                        .assetKind(AssetKind.INSTANCE)
+                        .globalAssetId(createGlobalId(11, "asset"))
+                        .specificAssetIds(new DefaultSpecificAssetId.Builder()
+                                .name("OpcUaServerID")
+                                .value(serverApplicationUri)
+                                .externalSubjectId(new DefaultReference.Builder()
+                                        .keys(new DefaultKey.Builder()
+                                                .type(KeyTypes.GLOBAL_REFERENCE)
+                                                .value(createGlobalId(11, "Systems"))
+                                                .build())
+                                        .type(ReferenceTypes.EXTERNAL_REFERENCE)
+                                        .build())
+                                .build())
+                        .defaultThumbnail(new DefaultResource.Builder()
+                                .contentType("image/jpg")
+                                .path("https://opcfoundation.org/wp-content/themes/opc/images/logo.jpg")
+                                .build())
+                        .build())
+                .build();
+    }
 
     /**
      * Creates a Submodel from an OPC UA subtree.
@@ -108,7 +133,7 @@ public class AasBuilder {
     public static Submodel createSubmodelOpcUaTree(NodeInfo subTree, String endpointUrl, String username, String password, String submodelRepositoryUrl) {
         String submodelIdShort = subTree.displayName.getText();
         Submodel generatedSM = new DefaultSubmodel.Builder()
-                .semanticID(new DefaultReference.Builder()
+                .semanticId(new DefaultReference.Builder()
                         .keys(new DefaultKey.Builder()
                                 .type(KeyTypes.GLOBAL_REFERENCE)
                                 .value(generateIrdi("0173", "0173-1#01-AAA650#002"))
@@ -181,7 +206,7 @@ public class AasBuilder {
                                     .value(createValue(node))
                                     .build();
                             Reference semanticId =  createConceptDescription(node);
-                            value.setSemanticID(semanticId); // add the ConceptDescription to the Property
+                            value.setSemanticId(semanticId); // add the ConceptDescription to the Property
                             DataBridgeConfig.writeOpcUaConsumerEntry(endpointUrl, username, password, node, submodelIdShort, idShortPath); // write the OPC UA Consumer entry to the DataBridge configuration file
                             DataBridgeConfig.writeRouteEntry(node, submodelIdShort, idShortPath, endpointUrl); // write the route entry to the DataBridge configuration file
                             DataBridgeConfig.writeAasServerEntry(node, submodelIdShort, SUBMODEL_OPC_UA_TREE_ID, idShortPath, submodelRepositoryUrl, endpointUrl); // write the AAS Server entry to the DataBridge configuration file
@@ -219,7 +244,7 @@ public class AasBuilder {
 
         try {
             // get the first child of the node and check if its dataType is EUInformation
-            NodeInfo firstChild = node.children.getFirst();
+            NodeInfo firstChild = node.children.get(0);
             if (firstChild.dataType.equals("EUInformation")) {
                 // get the value of the first child
                 EUInformation embeddedValue = (EUInformation) firstChild.value;
@@ -346,7 +371,7 @@ public class AasBuilder {
      * @param node The node to translate the datatype from.
      * @return The translated datatype.
      */
-    public static DataTypeDefXSD translateDatatype(NodeInfo node) {
+    public static DataTypeDefXsd translateDatatype(NodeInfo node) {
         String opcUaDataType = node.dataType;
 
         // Log the datatype being translated for debugging
@@ -355,27 +380,27 @@ public class AasBuilder {
         // Map OPC UA types to AAS types
         return switch (opcUaDataType) {
             // decimal types
-            case "SByte" -> DataTypeDefXSD.BYTE;
-            case "Byte" -> DataTypeDefXSD.UNSIGNED_BYTE;
-            case "Int16" -> DataTypeDefXSD.SHORT;
-            case "Int32" -> DataTypeDefXSD.INT;
-            case "Int64" -> DataTypeDefXSD.LONG;
-            case "UInt16" -> DataTypeDefXSD.UNSIGNED_SHORT;
-            case "UInt32" -> DataTypeDefXSD.UNSIGNED_INT;
-            case "UInt64" -> DataTypeDefXSD.UNSIGNED_LONG;
+            case "SByte" -> DataTypeDefXsd.BYTE;
+            case "Byte" -> DataTypeDefXsd.UNSIGNED_BYTE;
+            case "Int16" -> DataTypeDefXsd.SHORT;
+            case "Int32" -> DataTypeDefXsd.INT;
+            case "Int64" -> DataTypeDefXsd.LONG;
+            case "UInt16" -> DataTypeDefXsd.UNSIGNED_SHORT;
+            case "UInt32" -> DataTypeDefXsd.UNSIGNED_INT;
+            case "UInt64" -> DataTypeDefXsd.UNSIGNED_LONG;
             // floating point types
-            case "Float" -> DataTypeDefXSD.FLOAT;
-            case "Double" -> DataTypeDefXSD.DOUBLE;
+            case "Float" -> DataTypeDefXsd.FLOAT;
+            case "Double" -> DataTypeDefXsd.DOUBLE;
             // date and time types
-            case "DateTime" -> DataTypeDefXSD.DATE_TIME;
+            case "DateTime" -> DataTypeDefXsd.DATE_TIME;
             // Boolean type
-            case "Boolean" -> DataTypeDefXSD.BOOLEAN;
+            case "Boolean" -> DataTypeDefXsd.BOOLEAN;
             // String type
-            case "String", "Guid" -> DataTypeDefXSD.STRING;
-            case "ByteString" -> DataTypeDefXSD.BASE64BINARY;
+            case "String", "Guid" -> DataTypeDefXsd.STRING;
+            case "ByteString" -> DataTypeDefXsd.BASE64BINARY;
             default ->
                 // If no mapping exists, return String
-                    DataTypeDefXSD.STRING;
+                    DataTypeDefXsd.STRING;
         };
     }
 
@@ -499,10 +524,21 @@ public class AasBuilder {
      * @param submodelRepositoryUrl The URL of the Submodel Repository.
      * @return The created environment.
      */
-    public static Environment createEnvironment(String aasIdShort, String serverApplicationUri, NodeInfo subTree, String endpointUrl, String username, String password, String submodelRepositoryUrl) {
+    public static Environment createEnvironment(String aasIdShort, String serverApplicationUri, NodeInfo subTree, String endpointUrl, String username, String password, String submodelRepositoryUrl){
+
         return new DefaultEnvironment.Builder()
                 .assetAdministrationShells(createAAS(aasIdShort, serverApplicationUri))
                 .submodels(createSubmodelOpcUaTree(subTree, endpointUrl, username, password, submodelRepositoryUrl))
+                .conceptDescriptions(conceptDescriptions)
+                .build();
+    }
+    public static Environment createNewEnvironment(String aasIdShort, String serverApplicationUri, NodeInfo subTree, String endpointUrl, String username, String password, String submodelRepositoryUrl) throws IOException {
+        Submodel creationSubmodel = SubmodelFactory.creationSubmodel();
+        List<Submodel> submodels = new ArrayList<>();
+        submodels.add(creationSubmodel);
+        return new DefaultEnvironment.Builder()
+                .assetAdministrationShells(createNewAAS(aasIdShort, serverApplicationUri))
+                .submodels(submodels)
                 .conceptDescriptions(conceptDescriptions)
                 .build();
     }

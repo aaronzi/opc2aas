@@ -100,11 +100,6 @@ public class DataBridgeConfig {
      * Creates the initial configuration files for the DataBridge.
      */
     public static void createConfigFiles() {
-        File configFolder = new File("DataBridgeConfig");
-
-        if (!configFolder.exists()) {
-            configFolder.mkdir();
-        }
 
         String[] fileNames = {
                 "aasserver.json",
@@ -117,7 +112,7 @@ public class DataBridgeConfig {
 
         for (String fileName : fileNames) {
             try {
-                File file = new File(configFolder, fileName);
+                File file = new File(fileName);
                 FileWriter writer = new FileWriter(file, false); // false to overwrite
 
                 switch (fileName) {
@@ -160,13 +155,7 @@ public class DataBridgeConfig {
             ObjectMapper objectMapper = new ObjectMapper()
                     .setSerializationInclusion(JsonInclude.Include.NON_NULL); // Ignore null and empty fields globally;
 
-            File configFolder = new File("DataBridgeConfig");
-
-            if (!configFolder.exists()) {
-                configFolder.mkdir();
-            }
-
-            File file = new File(configFolder, "opcuaconsumer.json");
+            File file = new File("opcuaconsumer.json");
             // Read existing content
             List<OpcUaConsumerEntry> existingEntries = new ArrayList<>();
             if (file.exists()) {
@@ -212,14 +201,8 @@ public class DataBridgeConfig {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
 
-            File configFolder = new File("DataBridgeConfig");
-
-            if (!configFolder.exists()) {
-                configFolder.mkdir();
-            }
-
             // Read existing content
-            File file = new File(configFolder, "routes.json");
+            File file = new File("routes.json");
             List<RouteEntry> existingEntries = new ArrayList<>();
             if (file.exists()) {
                 String currentContent = Files.readString(file.toPath());
@@ -265,14 +248,8 @@ public class DataBridgeConfig {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
 
-            File configFolder = new File("DataBridgeConfig");
-
-            if (!configFolder.exists()) {
-                configFolder.mkdir();
-            }
-
             // Read existing content
-            File file = new File(configFolder, "aasserver.json");
+            File file = new File("aasserver.json");
             List<AasServerEntry> existingEntries = new ArrayList<>();
             if (file.exists()) {
                 String currentContent = Files.readString(file.toPath());

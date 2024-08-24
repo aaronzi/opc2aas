@@ -1,0 +1,35 @@
+# Ignore everything
+**
+
+# Allow files and directories needed for Maven build
+!/pom.xml
+!/src
+!/opc2aas
+!/opc2aas/pom.xml
+!/opc2aas/src
+
+# Allow files and directories needed for application runtime
+!/config
+!/scripts
+
+# Ignore Maven build output
+/target
+/opc2aas/target
+
+# Ignore IDE files
+/.idea
+/*.iml
+/.classpath
+/.project
+/.settings
+
+# Ignore system files
+/.DS_Store
+/Thumbs.db
+
+# Ignore git files
+/.git
+/.gitignore
+/.gitattributes
+/LICENSE
+/README.md

@@ -1,41 +1,104 @@
 package org.eclipse.digitaltwin.basyx.opc2aas;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import okhttp3.*;
+import java.io.*;
 import java.util.ArrayList;
+import java.io.File;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
-
 import org.eclipse.digitaltwin.aas4j.v3.model.Environment;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.SerializationException;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.aasx.AASXSerializer;
 
 public class OpcToAas {
     private static final Logger logger = LoggerFactory.getLogger(OpcToAas.class);
+    private static String aasIdShort;
+    private static String opcNodeId;
+    private static String opcServerUrl;
+    private static String opcUsername;
+    private static String opcPassword;
+    private static String submodelRepositoryUrl;
 
     /**
      * The main method of the application.
      *
      * @param args The command line arguments.
      */
-    public static void main(String[] args) {
+    public static void main() {
         try {
+
             logger.info("OPC2AAS started");
+
             initializeDataBridgeConfig();
+
             OpcUaClient client = createOpcUaClientConnection();
+
             NodeInfo subTree = readOpcUaSubtree(client);
             Environment generatedAAS = createAasEnvironment(client, subTree);
             exportAasAsFile(generatedAAS);
+
             logger.info("AAS saved to aas_environment.aasx");
+            String[] filePaths = {"opcuaconsumer.json", "jsonataExtractValue.json", "jsonatatransformer.json", "jsonjacksontransformer.json", "aasserver.json", "routes.json", "aas_environment.aasx"};
+            String[] idShort = {"consumerFile", "extractvalue", "jsonatatransformer", "jacksontransformer", "aasserver", "route", "aas"};
+
+            for (int i = 0; i < filePaths.length; i++) {
+                updateOutputSubmodel(filePaths[i], idShort[i]);
+            }
+
+            logger.info("Output Submodel Updated");
+
         } catch (Exception e) {
             logger.error("An error occurred during the runtime of OPC2AAS: ", e);
         }
+    }
+/*
+*
+* Updates the submodel element values of OutputSubmodel
+* each time there are new inputs of CreationSubmodel and
+* new files are created
+*
+* */
+    private static void updateOutputSubmodel(String filePath, String idShort) throws IOException {
+        File file = new File(filePath);
+
+        // Create a RequestBody that can hold the file as a part of form-data
+        RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", file.getName(), fileBody)
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+
+        // Construct the URL with the idShort
+        String url = "http://aas-environment:8081/submodels/T3V0cHV0U3VibW9kZWw/submodel-elements/" + idShort + "/attachment?fileName=" + file.getName();
+        System.out.println(url);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .put(requestBody) // Use PUT and set the multipart body
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            // Handle the response as needed
+            System.out.println("Response Code: " + response.code() + " - " + response.message());
+        }
+    }
+
+    public static void processOperation(String aasIdShort, String opcNodeId, String opcServerUrl, String opcUsername, String opcPassword, String submodelRepositoryUrl) {
+        // The input parameters
+        OpcToAas.aasIdShort = aasIdShort;
+        OpcToAas.opcNodeId = opcNodeId;
+        OpcToAas.opcServerUrl = opcServerUrl;
+        OpcToAas.opcUsername = opcUsername;
+        OpcToAas.opcPassword = opcPassword;
+        OpcToAas.submodelRepositoryUrl = submodelRepositoryUrl;
+        main();
+
     }
 
     /**
@@ -55,10 +118,10 @@ public class OpcToAas {
      * @throws Exception If the connection cannot be created.
      */
     private static OpcUaClient createOpcUaClientConnection() throws Exception {
-        String endpointUrl = System.getenv("ENDPOINT_URL"); // URL of the OPC UA server
-        String username = System.getenv("USERNAME"); // username for the OPC UA server
-        String password = System.getenv("PASSWORD"); // password for the OPC UA server
-        OpcUaClient client = OpcUtils.createClientConnection(endpointUrl, username, password);
+
+        System.out.println(opcServerUrl);
+        OpcUaClient client = OpcUtils.createClientConnection(opcServerUrl, opcUsername, opcPassword);
+
         logger.info("OPC UA client connection created");
         return client;
     }
@@ -72,9 +135,9 @@ public class OpcToAas {
      */
     private static NodeInfo readOpcUaSubtree(OpcUaClient client) throws Exception {
         // specify the NodeId of the starting node
-        NodeId startNodeId = OpcUtils.stringToNodeId(System.getenv("START_NODE_ID"));
+        NodeId nodeId = OpcUtils.stringToNodeId(opcNodeId); //String NodeId is taken from Submodel and converted to NodeID type
         // read the subtree starting from the specified starting node
-        NodeInfo subTree = OpcUtils.readEntireSubtree(client, startNodeId);
+        NodeInfo subTree = OpcUtils.readEntireSubtree(client, nodeId);
         logger.info("OPC UA subtree read");
 
         return subTree;
@@ -90,12 +153,7 @@ public class OpcToAas {
      */
     private static Environment createAasEnvironment(OpcUaClient client, NodeInfo subTree) throws Exception {
         String serverApplicationUri = OpcUtils.getServerApplicationUri(client);
-        String submodelRepositoryUrl = System.getenv("SUBMODEL_REPOSITORY_URL");
-        String aasIdShort = System.getenv("AAS_ID_SHORT");
-        String endpointUrl = System.getenv("ENDPOINT_URL"); // URL of the OPC UA server
-        String username = System.getenv("USERNAME"); // username for the OPC UA server
-        String password = System.getenv("PASSWORD"); // password for the OPC UA server
-        Environment environment = AasBuilder.createEnvironment(aasIdShort, serverApplicationUri, subTree, endpointUrl, username, password, submodelRepositoryUrl);
+        Environment environment = AasBuilder.createEnvironment(aasIdShort, serverApplicationUri, subTree, opcServerUrl, opcUsername, opcPassword, submodelRepositoryUrl);
         logger.info("AAS created");
         return environment;
     }
@@ -111,6 +169,7 @@ public class OpcToAas {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         new AASXSerializer().write(environment, new ArrayList<>(), out);
         writeByteArrayToFile(out.toByteArray());
+
     }
 
     /**
@@ -120,13 +179,8 @@ public class OpcToAas {
      * @throws IOException If the file cannot be written.
      */
     private static void writeByteArrayToFile(byte[] content) throws IOException {
-        File envFolder = new File("AasEnvConfig");
-        if (!envFolder.exists() && !envFolder.mkdir()) {
-            logger.error("Failed to create directory: {}", envFolder.getAbsolutePath());
-            return;
-        }
 
-        File file = new File(envFolder, "aas_environment.aasx");
+        File file = new File("aas_environment.aasx");
 
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(content);
